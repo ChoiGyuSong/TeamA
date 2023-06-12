@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class BattleField : MonoBehaviour
 {
@@ -9,8 +10,7 @@ public class BattleField : MonoBehaviour
     public PoolObjectType warriorObj;
     List<GameObject> objects = new List<GameObject>();
     Mage mage;
-    PlayerInputAction choiceCharater;
-    int choiceClass = 0;
+    PlayerInputAction inputAction;
 
     private void Start()
     {
@@ -20,65 +20,32 @@ public class BattleField : MonoBehaviour
 
     private void Awake()
     {
-        choiceCharater = new PlayerInputAction();
+        inputAction = new PlayerInputAction();
         mage = FindObjectOfType<Mage>();
-        mage.getDemage(5f, 0);
     }
 
     private void OnEnable()
     {
-        choiceCharater.Player.Enable();
-        choiceCharater.Player.Warrior.performed += OnWarrior;
-        choiceCharater.Player.Archer.performed += OnArcher;
-        choiceCharater.Player.Mage.performed += OnMage;
+        inputAction.Player.Enable();
+        inputAction.Player.Attack.performed += OnAttack;
+        inputAction.Player.Skill.performed += OnSkill;
     }
- 
-
     private void OnDisable()
     {
-        choiceCharater.Player.Mage.performed -= OnMage;
-        choiceCharater.Player.Archer.performed -= OnArcher;
-        choiceCharater.Player.Warrior.performed -= OnWarrior;
-        choiceCharater.Player.Disable();
+        inputAction.Player.Skill.performed -= OnSkill;
+        inputAction.Player.Attack.performed -= OnAttack;
+        inputAction.Player.Disable();
     }
 
-    private void OnWarrior(UnityEngine.InputSystem.InputAction.CallbackContext obj)
+    private void OnAttack(InputAction.CallbackContext context)
     {
-        ChoiceClass(1);
+        Debug.Log($"{mage}Attack");
+        mage.getDemage(5, 0);
     }
 
-    private void OnArcher(UnityEngine.InputSystem.InputAction.CallbackContext obj)
+    private void OnSkill(InputAction.CallbackContext context)
     {
-        ChoiceClass(2);
-    }
-    private void OnMage(UnityEngine.InputSystem.InputAction.CallbackContext obj)
-    {
-        ChoiceClass(3);
-    }
-
-    private void ChoiceClass(int choiceClass)
-    {
-        if (choiceClass == 1)
-        {
-            Debug.Log($"Warrior{choiceClass}");
-            GameObject test = Factory.Inst.GetObject(warriorObj);
-            test.transform.position = transform.position;
-            objects.Add(test);
-        }
-
-        else if (choiceClass == 2)
-        {
-            Debug.Log($"Archer{choiceClass}");
-        }
-
-        else if (choiceClass == 3)
-        {
-            Debug.Log($"Mage{choiceClass}");
-        }
-
-        else
-        {
-            Debug.Log("캐릭터 재선택");
-        }
+        Debug.Log($"{mage}Skill");
+        mage.getDemage(5, 1);
     }
 }
