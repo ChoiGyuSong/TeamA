@@ -56,7 +56,7 @@ public class Mage : CharacterBase
     { 
         inputAction.Player.ChoiceEnemy.performed -= OnChoiceEnemy;  // 적 선택 비활성화
         inputAction.Player.Skill.performed -= OnSkill;              // 스킬 선택 비활성화
-        //inputAction.Player.NumberPad.performed -= OnAttack;         // 기본공격 선택 비활성화
+        inputAction.Player.ChoiceEnemy.performed -= OnAttack;         // 기본공격 선택 비활성화
         inputAction.Player.Disable();
     }
   

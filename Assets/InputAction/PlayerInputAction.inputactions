@@ -64,7 +64,7 @@
                 {
                     "name": "",
                     "id": "93f81fcc-7969-4c20-9897-a52418251cf2",
-                    "path": "<Keyboard>/1",
+                    "path": "<Keyboard>/a",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
@@ -75,7 +75,7 @@
                 {
                     "name": "",
                     "id": "4fa8ce57-8e09-4aaa-9241-3aab30d46d8a",
-                    "path": "<Keyboard>/2",
+                    "path": "<Keyboard>/b",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
@@ -86,10 +86,32 @@
                 {
                     "name": "",
                     "id": "af8e2c68-cc76-406d-9195-a2a31d1d1456",
-                    "path": "<Keyboard>/a",
+                    "path": "<Keyboard>/1",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
+                    "action": "ChoiceEnemy",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "7165ff5b-56f3-4c03-9821-0dfbb19183d8",
+                    "path": "<Keyboard>/2",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "ChoiceEnemy",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "29340f46-8f61-4ada-938a-1dd3daff8fa9",
+                    "path": "<Keyboard>/3",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Player",
                     "action": "ChoiceEnemy",
                     "isComposite": false,
                     "isPartOfComposite": false
