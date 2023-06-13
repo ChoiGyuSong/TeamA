@@ -17,6 +17,7 @@ public class PlayerBase : CharacterBase
         enemy1 = FindObjectOfType<Enemy1>();
         enemy2 = FindObjectOfType<Enemy2>();
         enemy3 = FindObjectOfType<Enemy3>();
+        inputAction = new PlayerInputAction();
     }
 
     private void Start()
@@ -26,41 +27,36 @@ public class PlayerBase : CharacterBase
     private void OnEnable()     // inputAction 활성화
     {
         inputAction.Player.Enable();
-        inputAction.Player.Attack.performed += OnAttack;    // 기본공격 선택 활성화
-        inputAction.Player.Skill.performed += OnSkill;      // 스킬 선택 활성화
-        inputAction.Player.ChoiceEnemy.performed += OnChoiceEnemy;  // 적 선택 활성화
+        inputAction.Player.B1.performed += B1;    // 기본공격 선택 활성화
+        inputAction.Player.B2.performed += B2;      // 스킬 선택 활성화
+        inputAction.Player.B3.performed += B3;  // 적 선택 활성화
     }
 
 
 
     private void OnDisable()    // inputAction 비활성화
     {
-        inputAction.Player.ChoiceEnemy.performed -= OnChoiceEnemy;  // 적 선택 비활성화
-        inputAction.Player.Skill.performed -= OnSkill;              // 스킬 선택 비활성화
-        inputAction.Player.ChoiceEnemy.performed -= OnAttack;         // 기본공격 선택 비활성화
+        inputAction.Player.B1.performed -= B1;  // 적 선택 비활성화
+        inputAction.Player.B2.performed -= B2;              // 스킬 선택 비활성화
+        inputAction.Player.B3.performed -= B3;         // 기본공격 선택 비활성화
         inputAction.Player.Disable();
     }
 
-    private void OnAttack(InputAction.CallbackContext value)    // 일반공격 선택시(키보드 1)
+    private void B1(InputAction.CallbackContext value)    // 일반공격 선택시(키보드 1)
     {
-        Debug.Log("일반 공격이 선택되었습니다.");
+        Debug.Log(1);
+        enemy1.getDemage(5, 0);
     }
 
-    private void OnSkill(InputAction.CallbackContext value)     // 스킬공격 선택시(키보드 2)
+    private void B2(InputAction.CallbackContext value)     // 스킬공격 선택시(키보드 2)
     {
-        Debug.Log("스킬이 선택되었습니다.");
+        Debug.Log(2);
+        enemy2.getDemage(5, 0);
     }
 
-    private void OnChoiceEnemy(InputAction.CallbackContext value)
+    private void B3(InputAction.CallbackContext value)
     {
-        switch (value)
-        {
-            case 1: enemy = enemy1.GameObject();
-                break;
-            case 2: enemy = enemy2.GameObject();
-                break;
-            case 3: enemy = enemy3.GameObject();
-                break;
-        }
+        Debug.Log(3);
+        enemy3.getDemage(5, 0);
     }
 }

@@ -47,15 +47,15 @@ public partial class @PlayerInputAction: IInputActionCollection2, IDisposable
                 },
                 {
                     ""name"": ""ChoiceEnemy"",
-                    ""type"": ""Button"",
+                    ""type"": ""Value"",
                     ""id"": ""662e60d1-3f5f-4650-8efc-899b47331139"",
-                    ""expectedControlType"": ""Button"",
+                    ""expectedControlType"": ""Integer"",
                     ""processors"": """",
                     ""interactions"": """",
-                    ""initialStateCheck"": false
+                    ""initialStateCheck"": true
                 },
                 {
-                    ""name"": ""Warrior"",
+                    ""name"": ""B1"",
                     ""type"": ""Button"",
                     ""id"": ""cae78edb-aab0-4ae4-8bbe-8b840269950f"",
                     ""expectedControlType"": ""Button"",
@@ -64,7 +64,7 @@ public partial class @PlayerInputAction: IInputActionCollection2, IDisposable
                     ""initialStateCheck"": false
                 },
                 {
-                    ""name"": ""Archer"",
+                    ""name"": ""B2"",
                     ""type"": ""Button"",
                     ""id"": ""a6263ae9-a12c-45e4-84d7-e5acd2af7d2a"",
                     ""expectedControlType"": ""Button"",
@@ -73,7 +73,7 @@ public partial class @PlayerInputAction: IInputActionCollection2, IDisposable
                     ""initialStateCheck"": false
                 },
                 {
-                    ""name"": ""Mage"",
+                    ""name"": ""B3"",
                     ""type"": ""Button"",
                     ""id"": ""9906ff01-4995-4d42-aa1a-2bfddf6a8030"",
                     ""expectedControlType"": ""Button"",
@@ -108,10 +108,10 @@ public partial class @PlayerInputAction: IInputActionCollection2, IDisposable
                 {
                     ""name"": """",
                     ""id"": ""af8e2c68-cc76-406d-9195-a2a31d1d1456"",
-                    ""path"": ""<Keyboard>/1"",
+                    ""path"": ""1"",
                     ""interactions"": """",
                     ""processors"": """",
-                    ""groups"": """",
+                    ""groups"": ""Player"",
                     ""action"": ""ChoiceEnemy"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
@@ -119,10 +119,10 @@ public partial class @PlayerInputAction: IInputActionCollection2, IDisposable
                 {
                     ""name"": """",
                     ""id"": ""7165ff5b-56f3-4c03-9821-0dfbb19183d8"",
-                    ""path"": ""<Keyboard>/2"",
+                    ""path"": ""2"",
                     ""interactions"": """",
                     ""processors"": """",
-                    ""groups"": """",
+                    ""groups"": ""Player"",
                     ""action"": ""ChoiceEnemy"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
@@ -130,7 +130,7 @@ public partial class @PlayerInputAction: IInputActionCollection2, IDisposable
                 {
                     ""name"": """",
                     ""id"": ""29340f46-8f61-4ada-938a-1dd3daff8fa9"",
-                    ""path"": ""<Keyboard>/3"",
+                    ""path"": ""3"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""Player"",
@@ -144,8 +144,8 @@ public partial class @PlayerInputAction: IInputActionCollection2, IDisposable
                     ""path"": ""<Keyboard>/1"",
                     ""interactions"": """",
                     ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""Warrior"",
+                    ""groups"": ""Player"",
+                    ""action"": ""B1"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -155,8 +155,8 @@ public partial class @PlayerInputAction: IInputActionCollection2, IDisposable
                     ""path"": ""<Keyboard>/2"",
                     ""interactions"": """",
                     ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""Archer"",
+                    ""groups"": ""Player"",
+                    ""action"": ""B2"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -166,8 +166,8 @@ public partial class @PlayerInputAction: IInputActionCollection2, IDisposable
                     ""path"": ""<Keyboard>/3"",
                     ""interactions"": """",
                     ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""Mage"",
+                    ""groups"": ""Player"",
+                    ""action"": ""B3"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -198,9 +198,9 @@ public partial class @PlayerInputAction: IInputActionCollection2, IDisposable
         m_Player_Attack = m_Player.FindAction("Attack", throwIfNotFound: true);
         m_Player_Skill = m_Player.FindAction("Skill", throwIfNotFound: true);
         m_Player_ChoiceEnemy = m_Player.FindAction("ChoiceEnemy", throwIfNotFound: true);
-        m_Player_Warrior = m_Player.FindAction("Warrior", throwIfNotFound: true);
-        m_Player_Archer = m_Player.FindAction("Archer", throwIfNotFound: true);
-        m_Player_Mage = m_Player.FindAction("Mage", throwIfNotFound: true);
+        m_Player_B1 = m_Player.FindAction("B1", throwIfNotFound: true);
+        m_Player_B2 = m_Player.FindAction("B2", throwIfNotFound: true);
+        m_Player_B3 = m_Player.FindAction("B3", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -265,9 +265,9 @@ public partial class @PlayerInputAction: IInputActionCollection2, IDisposable
     private readonly InputAction m_Player_Attack;
     private readonly InputAction m_Player_Skill;
     private readonly InputAction m_Player_ChoiceEnemy;
-    private readonly InputAction m_Player_Warrior;
-    private readonly InputAction m_Player_Archer;
-    private readonly InputAction m_Player_Mage;
+    private readonly InputAction m_Player_B1;
+    private readonly InputAction m_Player_B2;
+    private readonly InputAction m_Player_B3;
     public struct PlayerActions
     {
         private @PlayerInputAction m_Wrapper;
@@ -275,9 +275,9 @@ public partial class @PlayerInputAction: IInputActionCollection2, IDisposable
         public InputAction @Attack => m_Wrapper.m_Player_Attack;
         public InputAction @Skill => m_Wrapper.m_Player_Skill;
         public InputAction @ChoiceEnemy => m_Wrapper.m_Player_ChoiceEnemy;
-        public InputAction @Warrior => m_Wrapper.m_Player_Warrior;
-        public InputAction @Archer => m_Wrapper.m_Player_Archer;
-        public InputAction @Mage => m_Wrapper.m_Player_Mage;
+        public InputAction @B1 => m_Wrapper.m_Player_B1;
+        public InputAction @B2 => m_Wrapper.m_Player_B2;
+        public InputAction @B3 => m_Wrapper.m_Player_B3;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -296,15 +296,15 @@ public partial class @PlayerInputAction: IInputActionCollection2, IDisposable
             @ChoiceEnemy.started += instance.OnChoiceEnemy;
             @ChoiceEnemy.performed += instance.OnChoiceEnemy;
             @ChoiceEnemy.canceled += instance.OnChoiceEnemy;
-            @Warrior.started += instance.OnWarrior;
-            @Warrior.performed += instance.OnWarrior;
-            @Warrior.canceled += instance.OnWarrior;
-            @Archer.started += instance.OnArcher;
-            @Archer.performed += instance.OnArcher;
-            @Archer.canceled += instance.OnArcher;
-            @Mage.started += instance.OnMage;
-            @Mage.performed += instance.OnMage;
-            @Mage.canceled += instance.OnMage;
+            @B1.started += instance.OnB1;
+            @B1.performed += instance.OnB1;
+            @B1.canceled += instance.OnB1;
+            @B2.started += instance.OnB2;
+            @B2.performed += instance.OnB2;
+            @B2.canceled += instance.OnB2;
+            @B3.started += instance.OnB3;
+            @B3.performed += instance.OnB3;
+            @B3.canceled += instance.OnB3;
         }
 
         private void UnregisterCallbacks(IPlayerActions instance)
@@ -318,15 +318,15 @@ public partial class @PlayerInputAction: IInputActionCollection2, IDisposable
             @ChoiceEnemy.started -= instance.OnChoiceEnemy;
             @ChoiceEnemy.performed -= instance.OnChoiceEnemy;
             @ChoiceEnemy.canceled -= instance.OnChoiceEnemy;
-            @Warrior.started -= instance.OnWarrior;
-            @Warrior.performed -= instance.OnWarrior;
-            @Warrior.canceled -= instance.OnWarrior;
-            @Archer.started -= instance.OnArcher;
-            @Archer.performed -= instance.OnArcher;
-            @Archer.canceled -= instance.OnArcher;
-            @Mage.started -= instance.OnMage;
-            @Mage.performed -= instance.OnMage;
-            @Mage.canceled -= instance.OnMage;
+            @B1.started -= instance.OnB1;
+            @B1.performed -= instance.OnB1;
+            @B1.canceled -= instance.OnB1;
+            @B2.started -= instance.OnB2;
+            @B2.performed -= instance.OnB2;
+            @B2.canceled -= instance.OnB2;
+            @B3.started -= instance.OnB3;
+            @B3.performed -= instance.OnB3;
+            @B3.canceled -= instance.OnB3;
         }
 
         public void RemoveCallbacks(IPlayerActions instance)
@@ -358,8 +358,8 @@ public partial class @PlayerInputAction: IInputActionCollection2, IDisposable
         void OnAttack(InputAction.CallbackContext context);
         void OnSkill(InputAction.CallbackContext context);
         void OnChoiceEnemy(InputAction.CallbackContext context);
-        void OnWarrior(InputAction.CallbackContext context);
-        void OnArcher(InputAction.CallbackContext context);
-        void OnMage(InputAction.CallbackContext context);
+        void OnB1(InputAction.CallbackContext context);
+        void OnB2(InputAction.CallbackContext context);
+        void OnB3(InputAction.CallbackContext context);
     }
 }

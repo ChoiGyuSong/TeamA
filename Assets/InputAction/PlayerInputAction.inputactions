@@ -25,15 +25,15 @@
                 },
                 {
                     "name": "ChoiceEnemy",
-                    "type": "Button",
+                    "type": "Value",
                     "id": "662e60d1-3f5f-4650-8efc-899b47331139",
-                    "expectedControlType": "Button",
+                    "expectedControlType": "Integer",
                     "processors": "",
                     "interactions": "",
-                    "initialStateCheck": false
+                    "initialStateCheck": true
                 },
                 {
-                    "name": "Warrior",
+                    "name": "B1",
                     "type": "Button",
                     "id": "cae78edb-aab0-4ae4-8bbe-8b840269950f",
                     "expectedControlType": "Button",
@@ -42,7 +42,7 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "Archer",
+                    "name": "B2",
                     "type": "Button",
                     "id": "a6263ae9-a12c-45e4-84d7-e5acd2af7d2a",
                     "expectedControlType": "Button",
@@ -51,7 +51,7 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "Mage",
+                    "name": "B3",
                     "type": "Button",
                     "id": "9906ff01-4995-4d42-aa1a-2bfddf6a8030",
                     "expectedControlType": "Button",
@@ -86,10 +86,10 @@
                 {
                     "name": "",
                     "id": "af8e2c68-cc76-406d-9195-a2a31d1d1456",
-                    "path": "<Keyboard>/1",
+                    "path": "1",
                     "interactions": "",
                     "processors": "",
-                    "groups": "",
+                    "groups": "Player",
                     "action": "ChoiceEnemy",
                     "isComposite": false,
                     "isPartOfComposite": false
@@ -97,10 +97,10 @@
                 {
                     "name": "",
                     "id": "7165ff5b-56f3-4c03-9821-0dfbb19183d8",
-                    "path": "<Keyboard>/2",
+                    "path": "2",
                     "interactions": "",
                     "processors": "",
-                    "groups": "",
+                    "groups": "Player",
                     "action": "ChoiceEnemy",
                     "isComposite": false,
                     "isPartOfComposite": false
@@ -108,7 +108,7 @@
                 {
                     "name": "",
                     "id": "29340f46-8f61-4ada-938a-1dd3daff8fa9",
-                    "path": "<Keyboard>/3",
+                    "path": "3",
                     "interactions": "",
                     "processors": "",
                     "groups": "Player",
@@ -122,8 +122,8 @@
                     "path": "<Keyboard>/1",
                     "interactions": "",
                     "processors": "",
-                    "groups": "",
-                    "action": "Warrior",
+                    "groups": "Player",
+                    "action": "B1",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -133,8 +133,8 @@
                     "path": "<Keyboard>/2",
                     "interactions": "",
                     "processors": "",
-                    "groups": "",
-                    "action": "Archer",
+                    "groups": "Player",
+                    "action": "B2",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -144,8 +144,8 @@
                     "path": "<Keyboard>/3",
                     "interactions": "",
                     "processors": "",
-                    "groups": "",
-                    "action": "Mage",
+                    "groups": "Player",
+                    "action": "B3",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
