@@ -33,8 +33,8 @@ public class CharacterBase : MonoBehaviour
     //마나 체력 받기
     public float HP
     {
-        get => MaxHp;
-        protected set
+        get => hp;
+        set
         {
             if(hp != value)
             {
@@ -49,7 +49,7 @@ public class CharacterBase : MonoBehaviour
     }
     public float MP
     {
-        get => MaxMp;
+        get => mp;
         protected set
         {
             if(mp != value)
@@ -68,8 +68,14 @@ public class CharacterBase : MonoBehaviour
     {
         // enemy = find
         //CharacterStats();
-        Hit = transform.GetChild(0).gameObject;
-        Hit.SetActive(false);
+        //Hit = transform.GetChild(0).gameObject;
+        //Hit.SetActive(false);
+        hp = MaxHp;
+        mp = MaxMp;
+    }
+    private void Start()
+    {
+        Attack();
     }
 
     /// <summary>
@@ -83,7 +89,7 @@ public class CharacterBase : MonoBehaviour
         Defence = 1f * DefenceMultiple;
         Anti = 1f * AntiMultiple;
     }*/
-    
+
     /// <summary>
     /// 주는 데미지
     /// </summary>
@@ -95,7 +101,7 @@ public class CharacterBase : MonoBehaviour
             Damage = (Strike * StrikeMultiple + Intelligent * IntelligentMultiple) * Critical;
         }
         else Damage = (Strike * StrikeMultiple + Intelligent * IntelligentMultiple);
-        //적.getDamage(Damage,0);       // 적에게 데미지 줄때
+        getDemage(Damage, 0);       // 적에게 데미지 줄때
     }
 
     /// <summary>
@@ -107,8 +113,9 @@ public class CharacterBase : MonoBehaviour
     {
         if(DamageSort == 0) HP -= getDamage / Defence;
         else if(DamageSort == 1) HP -= getDamage / Anti;
+        Debug.Log(Damage);
         Debug.Log(HP);
-        StartCoroutine(hit());
+        //StartCoroutine(hit());
     }
 
     /// <summary>
@@ -123,10 +130,10 @@ public class CharacterBase : MonoBehaviour
     /// 데이지 애니메이션 실행
     /// </summary>
     /// <returns>AnimationTime시간 만큼 실행</returns>
-    IEnumerator hit()
+    /*IEnumerator hit()
     {
         Hit.SetActive(true);
         yield return AnimationTime;
         Hit.SetActive(false);
-    }
+    }*/
 }
