@@ -25,11 +25,11 @@ public class Mage : CharacterBase
         StartCoroutine(SkillEffect());          // 스킬 이펙트 코루틴
     }
 
-    protected override void Attack()        // 기본공격 함수
-    {
-        base.Attack();
-        StartCoroutine(AttackEffect());     // 기본공격 이펙트 코루틴
-    }
+    //  protected override void Attack()        // 기본공격 함수
+    //  {
+    //      base.Attack();
+    //      StartCoroutine(AttackEffect());     // 기본공격 이펙트 코루틴
+    //  }
 
     protected override void Awake()
     {
@@ -76,7 +76,7 @@ public class Mage : CharacterBase
     {
         if ( choiceAttack == 1)         // 적 선택시 행동 선택이 1이었다면
         {
-            Attack();                   // 기본 공격 실행
+            //  Attack();                   // 기본 공격 실행
             Debug.Log("적 공격");
             choiceAttack = 0;           // 행동 선택 초기화
         }

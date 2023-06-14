@@ -12,7 +12,10 @@ public class PlayerBase : CharacterBase
 
     Vector3 mousePosition;      // 마우스 위치 
 
-    BoxCollider2D enemyCollider;
+    float skill = 0.0f;
+
+    private CharacterBase targetObject;
+    GameObject clickObject = null;
 
     protected override void Awake()
     {
@@ -36,24 +39,50 @@ public class PlayerBase : CharacterBase
             {
                 if (hit.collider != null)   // 콜라이더 선택이 null이 아닐시(클릭을 콜라이더에 했을때)
                 {
-                    if (choiceAction == 1)  // 행동이 1번이면
+                    clickObject = hit.collider.gameObject;
+                    targetObject = clickObject.GetComponent<CharacterBase>();
+                    if (hit.collider.gameObject.name == "Enemy1")
                     {
-                        Debug.Log("적에게 기본공격");  
-                        choiceAction = 0;   // 초기화
+                        if (choiceAction == 1)  // 행동이 1번이면
+                        {
+                            Debug.Log("1번 적에게 기본공격");
+                            Attack(targetObject);
+                            choiceAction = 0;   // 초기화
+                        }
+                        else if (choiceAction == 2) // 행동이 2번이면
+                        {
+                            Debug.Log("1번 적에게 1번 스킬 공격");
+                            SkillA(targetObject);
+                            choiceAction = 0;       // 초기화
+                        }
+                        else if (choiceAction == 3) // 행동이 3번이면
+                        {
+                            Debug.Log("1번 적에게 2번 스킬 공격");
+                            SkillB(targetObject);
+                            choiceAction = 0;       // 초기화
+                        }
+
                     }
-                    else if (choiceAction == 2) // 행동이 2번이면
+                    if (hit.collider.gameObject.name == "Enemy2")
                     {
-                        Debug.Log("적에게 1번 스킬 공격");
-                        choiceAction = 0;       // 초기화
-                    }
-                    else if (choiceAction == 3) // 행동이 3번이면
-                    {
-                        Debug.Log("적에게 2번 스킬 공격");
-                        choiceAction = 0;       // 초기화
-                    }
-                    else
-                    {
-                        Debug.Log("적을 선택하세요");
+                        if (choiceAction == 1)  // 행동이 1번이면
+                        {
+                            Debug.Log("2번 적에게 기본공격");
+                            Attack(targetObject);
+                            choiceAction = 0;   // 초기화
+                        }
+                        else if (choiceAction == 2) // 행동이 2번이면
+                        {
+                            Debug.Log("2번 적에게 1번 스킬 공격");
+                            SkillA(targetObject);
+                            choiceAction = 0;       // 초기화
+                        }
+                        else if (choiceAction == 3) // 행동이 3번이면
+                        {
+                            Debug.Log("2번 적에게 2번 스킬 공격");
+                            SkillB(targetObject);
+                            choiceAction = 0;       // 초기화
+                        }
                     }
                 }
             }
@@ -76,6 +105,31 @@ public class PlayerBase : CharacterBase
         inputAction.Player.B2.performed -= B2;              // 스킬 선택 비활성화
         inputAction.Player.B3.performed -= B3;         // 기본공격 선택 비활성화
         inputAction.Player.Disable();
+    }
+
+    protected override void Attack(CharacterBase target)
+    {
+        base.Attack(target);
+    }
+
+    protected virtual void SkillA(CharacterBase target)
+    {
+        if (Random.Range(0, 100) < Agility)
+        {
+            skill = (Strike * StrikeMultiple) * Critical;
+        }
+        else skill = (Strike * StrikeMultiple);
+        getDemage(skill, 0);
+    }
+
+    protected virtual void SkillB(CharacterBase target)
+    {
+        if (Random.Range(0, 100) < Agility)
+        {
+            skill = (Strike * StrikeMultiple) * Critical;
+        }
+        else skill = (Strike * StrikeMultiple);
+        getDemage(skill, 0);
     }
 
     private void B1(InputAction.CallbackContext value)     // 일반공격 선택시(키보드 1)

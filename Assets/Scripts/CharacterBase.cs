@@ -75,7 +75,7 @@ public class CharacterBase : MonoBehaviour
     }
     private void Start()
     {
-        Attack();
+
     }
 
     /// <summary>
@@ -94,20 +94,20 @@ public class CharacterBase : MonoBehaviour
     /// 주는 데미지
     /// </summary>
     /// <returns>주는 데미지 리턴</returns>
-    protected virtual void Attack()
+    protected virtual void Attack(CharacterBase target)
     {
         if (Random.Range(0, 100) < Agility)
         {
             Damage = (Strike * StrikeMultiple + Intelligent * IntelligentMultiple) * Critical;
         }
         else Damage = (Strike * StrikeMultiple + Intelligent * IntelligentMultiple);
-        getDemage(Damage, 0);       // 적에게 데미지 줄때
+        target.getDemage(Damage, 0);       // 적에게 데미지 줌
     }
 
     /// <summary>
     /// 받는 데미지
     /// </summary>
-    /// <param name="getDamage">데미지</param>
+    /// <param name="getDamage">데미지</param>s
     /// <param name="DamageSort">받는 데미지 종류</param>
     public void getDemage(float getDamage, int DamageSort)
     {
@@ -130,10 +130,10 @@ public class CharacterBase : MonoBehaviour
     /// 데이지 애니메이션 실행
     /// </summary>
     /// <returns>AnimationTime시간 만큼 실행</returns>
-    /*IEnumerator hit()
-    {
-        Hit.SetActive(true);
-        yield return AnimationTime;
-        Hit.SetActive(false);
-    }*/
+    //  IEnumerator hit()
+    //  {
+    //      Hit.SetActive(true);
+    //      yield return AnimationTime;
+    //      Hit.SetActive(false);
+    //  }
 }
