@@ -7,10 +7,6 @@ using static UnityEditor.PlayerSettings;
 
 public class PlayerBase : CharacterBase
 {
-    Enemy1 enemy1;
-    Enemy2 enemy2;
-    Enemy3 enemy3;
-    GameObject enemy;
     PlayerInputAction inputAction;
     int choiceAction = 0;
 
@@ -20,9 +16,6 @@ public class PlayerBase : CharacterBase
 
     protected override void Awake()
     {
-        enemy1 = FindObjectOfType<Enemy1>();
-        enemy2 = FindObjectOfType<Enemy2>();
-        enemy3 = FindObjectOfType<Enemy3>();
         inputAction = new PlayerInputAction();
     }
 
