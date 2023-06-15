@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 
 public class CharacterBase : MonoBehaviour
@@ -39,6 +40,7 @@ public class CharacterBase : MonoBehaviour
             if(hp != value)
             {
                 hp = value;
+                Debug.Log(HP);
                 if(hp < 0)
                 {
                     hp = 0;
@@ -47,14 +49,16 @@ public class CharacterBase : MonoBehaviour
             }
         }
     }
-    public float MP
+    protected virtual float MP
     {
         get => mp;
-        protected set
+        set
         {
             if(mp != value)
             {
                 mp = value;
+                Debug.Log($"현재 마나는 {mp}");
+                Debug.Log($"현재 마나는 {MP}");
             }
         }
     }
@@ -94,13 +98,14 @@ public class CharacterBase : MonoBehaviour
     /// 주는 데미지
     /// </summary>
     /// <returns>주는 데미지 리턴</returns>
-    protected virtual void Attack(CharacterBase target)
+    protected virtual void Attack(CharacterBase target, int attackType)
     {
         if (Random.Range(0, 100) < Agility)
         {
             Damage = (Strike * StrikeMultiple + Intelligent * IntelligentMultiple) * Critical;
         }
         else Damage = (Strike * StrikeMultiple + Intelligent * IntelligentMultiple);
+        Debug.Log($"기본공격으로 {Damage}만큼 {target}에게 피해를 줌");
         target.getDemage(Damage, 0);       // 적에게 데미지 줌
     }
 
@@ -113,8 +118,6 @@ public class CharacterBase : MonoBehaviour
     {
         if(DamageSort == 0) HP -= getDamage / Defence;
         else if(DamageSort == 1) HP -= getDamage / Anti;
-        Debug.Log(Damage);
-        Debug.Log(HP);
         //StartCoroutine(hit());
     }
 

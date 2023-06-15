@@ -14,11 +14,18 @@ public class PlayerBase : CharacterBase
 
     float skill = 0.0f;
 
+    public float ASkillCoefficient = 5.0f;
+    public float BSkillCoefficient = 1.5f;
+
     private CharacterBase targetObject;
     GameObject clickObject = null;
 
+    public int costA = 20;
+    public int costB = 30;
+
     protected override void Awake()
     {
+        base.Awake();
         inputAction = new PlayerInputAction();
     }
 
@@ -45,21 +52,34 @@ public class PlayerBase : CharacterBase
                     {
                         if (choiceAction == 1)  // 행동이 1번이면
                         {
-                            Debug.Log("1번 적에게 기본공격");
-                            Attack(targetObject);
+                            Attack(targetObject,0);
                             choiceAction = 0;   // 초기화
                         }
                         else if (choiceAction == 2) // 행동이 2번이면
                         {
-                            Debug.Log("1번 적에게 1번 스킬 공격");
-                            SkillA(targetObject);
-                            choiceAction = 0;       // 초기화
+                            if(MP >= costA)
+                            {
+                                Attack(targetObject, 1);
+                                choiceAction = 0;       // 초기화
+                            }
+                            else
+                            {
+                                Debug.Log("MP가 부족합니다 행동을 재선택하세요");
+                                choiceAction = 0;
+                            }
                         }
                         else if (choiceAction == 3) // 행동이 3번이면
                         {
-                            Debug.Log("1번 적에게 2번 스킬 공격");
-                            SkillB(targetObject);
-                            choiceAction = 0;       // 초기화
+                            if (MP >= costB)
+                            {
+                                Attack(targetObject, 2);
+                                choiceAction = 0;       // 초기화
+                            }
+                            else
+                            {
+                                Debug.Log("MP가 부족합니다 행동을 재선택하세요");
+                                choiceAction = 0;
+                            }
                         }
 
                     }
@@ -67,21 +87,34 @@ public class PlayerBase : CharacterBase
                     {
                         if (choiceAction == 1)  // 행동이 1번이면
                         {
-                            Debug.Log("2번 적에게 기본공격");
-                            Attack(targetObject);
+                            Attack(targetObject, 0);
                             choiceAction = 0;   // 초기화
                         }
                         else if (choiceAction == 2) // 행동이 2번이면
                         {
-                            Debug.Log("2번 적에게 1번 스킬 공격");
-                            SkillA(targetObject);
-                            choiceAction = 0;       // 초기화
+                            if (MP >= costA)
+                            {
+                                Attack(targetObject, 1);
+                                choiceAction = 0;       // 초기화
+                            }
+                            else
+                            {
+                                Debug.Log("MP가 부족합니다 행동을 재선택하세요");
+                                choiceAction = 0;
+                            }
                         }
                         else if (choiceAction == 3) // 행동이 3번이면
                         {
-                            Debug.Log("2번 적에게 2번 스킬 공격");
-                            SkillB(targetObject);
-                            choiceAction = 0;       // 초기화
+                            if (MP >= costB)
+                            {
+                                Attack(targetObject, 2);
+                                choiceAction = 0;       // 초기화
+                            }
+                            else
+                            {
+                                Debug.Log("MP가 부족합니다 행동을 재선택하세요");
+                                choiceAction = 0;
+                            }
                         }
                     }
                 }
@@ -92,8 +125,8 @@ public class PlayerBase : CharacterBase
     private void OnEnable()     // inputAction 활성화
     {
         inputAction.Player.Enable();
-        inputAction.Player.B1.performed += B1;    // 기본공격 선택 활성화
-        inputAction.Player.B2.performed += B2;      // 스킬 선택 활성화
+        inputAction.Player.B1.performed += B1;  // 기본공격 선택 활성화
+        inputAction.Player.B2.performed += B2;  // 스킬 선택 활성화
         inputAction.Player.B3.performed += B3;  // 적 선택 활성화
     }
 
@@ -102,35 +135,45 @@ public class PlayerBase : CharacterBase
     private void OnDisable()    // inputAction 비활성화
     {
         inputAction.Player.B1.performed -= B1;  // 적 선택 비활성화
-        inputAction.Player.B2.performed -= B2;              // 스킬 선택 비활성화
-        inputAction.Player.B3.performed -= B3;         // 기본공격 선택 비활성화
+        inputAction.Player.B2.performed -= B2;  // 스킬 선택 비활성화
+        inputAction.Player.B3.performed -= B3;  // 기본공격 선택 비활성화
         inputAction.Player.Disable();
     }
 
-    protected override void Attack(CharacterBase target)
+    protected override void Attack(CharacterBase target, int attackType)
     {
-        base.Attack(target);
+        switch (attackType)
+        {
+            case 0:
+                base.Attack(target,0);
+                break;
+            case 1:
+                MP -= costA;
+                if (Random.Range(0, 100) < Agility)
+                {
+                    skill = (Strike * (StrikeMultiple * ASkillCoefficient) + Intelligent * IntelligentMultiple) * Critical;
+                }
+                else skill = (Strike * (StrikeMultiple * ASkillCoefficient) + Intelligent * IntelligentMultiple);
+                Debug.Log($"1번 스킬로 {skill}만큼 {target}에게 피해를 주었다.");
+                // Debug.Log($"현재 마나는 {MP}");
+                target.getDemage(skill, 0);
+                
+                break;
+            case 2:
+                MP -= costB;
+                if (Random.Range(0, 100) < Agility)
+                {
+                    skill = (Strike * (StrikeMultiple * BSkillCoefficient) + Intelligent * IntelligentMultiple) * Critical;
+                }
+                else skill = (Strike * (StrikeMultiple * BSkillCoefficient) + Intelligent * IntelligentMultiple);
+                Debug.Log($"2번 스킬로 {skill}만큼 {target}에게 피해를 주었다.");
+                // Debug.Log($"현재 마나는 {MP}");
+                target.getDemage(skill, 0);
+                break;
+        }
+        
     }
 
-    protected virtual void SkillA(CharacterBase target)
-    {
-        if (Random.Range(0, 100) < Agility)
-        {
-            skill = (Strike * StrikeMultiple) * Critical;
-        }
-        else skill = (Strike * StrikeMultiple);
-        getDemage(skill, 0);
-    }
-
-    protected virtual void SkillB(CharacterBase target)
-    {
-        if (Random.Range(0, 100) < Agility)
-        {
-            skill = (Strike * StrikeMultiple) * Critical;
-        }
-        else skill = (Strike * StrikeMultiple);
-        getDemage(skill, 0);
-    }
 
     private void B1(InputAction.CallbackContext value)     // 일반공격 선택시(키보드 1)
     {
