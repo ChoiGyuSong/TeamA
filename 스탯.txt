@@ -1,0 +1,20 @@
+    //기본 스탯
+    public float Strike = 1f;
+    public float Intelligent = 1f;
+    public float Agility = 1f;
+    public float Defence = 1f;
+    public float Anti = 1f;
+    float hp;
+    float mp;
+    //최대 마나체력
+    public float MaxHp = 100f;
+    public float MaxMp = 100f;
+    //스탯 배수 설정
+    public float StrikeMultiple;
+    public float IntelligentMultiple;
+    public float DefenceMultiple;
+    public float AntiMultiple;
+    //치명타 배수
+    public float Critical = 2f;
+    //임시 데미지 이펙트 시간
+    public float AnimationTime = 1f;
