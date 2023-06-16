@@ -35,9 +35,12 @@ public class CharacterBase : MonoBehaviour
         {
             if(hp != value)
             {
-                hp = value;
-                Debug.Log(HP);
-                if(hp < 0)
+                if (hp > 0)
+                {
+                    hp = value;
+                    Debug.Log(HP);
+                }
+                else
                 {
                     hp = 0;
                     Die();
