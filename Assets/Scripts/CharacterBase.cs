@@ -5,10 +5,6 @@ using UnityEngine;
 
 public class CharacterBase : MonoBehaviour
 {
-    //데미지 애니매이션
-    GameObject Hit;
-    //적 생성
-    GameObject enemy;
     //최종 데미지
     float Damage;
     //기본 스탯
@@ -58,12 +54,9 @@ public class CharacterBase : MonoBehaviour
             {
                 mp = value;
                 Debug.Log($"현재 마나는 {mp}");
-                Debug.Log($"현재 마나는 {MP}");
             }
         }
     }
-    //적 이름 받기
-    public string enemyName;
     
     /// <summary>
     /// 캐릭터 스탯
@@ -77,22 +70,6 @@ public class CharacterBase : MonoBehaviour
         hp = MaxHp;
         mp = MaxMp;
     }
-    private void Start()
-    {
-
-    }
-
-    /// <summary>
-    /// 캐릭터 스탯
-    /// </summary>
-    /*protected virtual void CharacterStats()
-    {
-        Strike = 1f;
-        Intelligent = 50f;
-        Agility = 1f;
-        Defence = 1f * DefenceMultiple;
-        Anti = 1f * AntiMultiple;
-    }*/
 
     /// <summary>
     /// 주는 데미지
@@ -106,7 +83,7 @@ public class CharacterBase : MonoBehaviour
         }
         else Damage = (Strike * StrikeMultiple + Intelligent * IntelligentMultiple);
         Debug.Log($"기본공격으로 {Damage}만큼 {target}에게 피해를 줌");
-        target.getDemage(Damage, 0);       // 적에게 데미지 줌
+        target.GetDemage(Damage, 0);       // 적에게 데미지 줌
     }
 
     /// <summary>
@@ -114,7 +91,7 @@ public class CharacterBase : MonoBehaviour
     /// </summary>
     /// <param name="getDamage">데미지</param>s
     /// <param name="DamageSort">받는 데미지 종류</param>
-    public void getDemage(float getDamage, int DamageSort)
+    public void GetDemage(float getDamage, int DamageSort)
     {
         if(DamageSort == 0) HP -= getDamage / Defence;
         else if(DamageSort == 1) HP -= getDamage / Anti;
@@ -128,15 +105,4 @@ public class CharacterBase : MonoBehaviour
     {
         Debug.Log("Die");
     }
-
-    /// <summary>
-    /// 데이지 애니메이션 실행
-    /// </summary>
-    /// <returns>AnimationTime시간 만큼 실행</returns>
-    //  IEnumerator hit()
-    //  {
-    //      Hit.SetActive(true);
-    //      yield return AnimationTime;
-    //      Hit.SetActive(false);
-    //  }
 }

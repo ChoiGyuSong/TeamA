@@ -29,11 +29,6 @@ public class PlayerBase : CharacterBase
         inputAction = new PlayerInputAction();
     }
 
-    private void Start()
-    {
-
-    }
-
     private void Update()
     {
         if (Input.GetMouseButtonDown(0))    // 마우스 클릭되었을때
@@ -50,72 +45,11 @@ public class PlayerBase : CharacterBase
                     targetObject = clickObject.GetComponent<CharacterBase>();
                     if (hit.collider.gameObject.name == "Enemy1")
                     {
-                        if (choiceAction == 1)  // 행동이 1번이면
-                        {
-                            Attack(targetObject,0);
-                            choiceAction = 0;   // 초기화
-                        }
-                        else if (choiceAction == 2) // 행동이 2번이면
-                        {
-                            if(MP >= costA)
-                            {
-                                Attack(targetObject, 1);
-                                choiceAction = 0;       // 초기화
-                            }
-                            else
-                            {
-                                Debug.Log("MP가 부족합니다 행동을 재선택하세요");
-                                choiceAction = 0;
-                            }
-                        }
-                        else if (choiceAction == 3) // 행동이 3번이면
-                        {
-                            if (MP >= costB)
-                            {
-                                Attack(targetObject, 2);
-                                choiceAction = 0;       // 초기화
-                            }
-                            else
-                            {
-                                Debug.Log("MP가 부족합니다 행동을 재선택하세요");
-                                choiceAction = 0;
-                            }
-                        }
-
+                        ChoiceAction(targetObject, choiceAction);
                     }
-                    if (hit.collider.gameObject.name == "Enemy2")
+                    else if (hit.collider.gameObject.name == "Enemy2")
                     {
-                        if (choiceAction == 1)  // 행동이 1번이면
-                        {
-                            Attack(targetObject, 0);
-                            choiceAction = 0;   // 초기화
-                        }
-                        else if (choiceAction == 2) // 행동이 2번이면
-                        {
-                            if (MP >= costA)
-                            {
-                                Attack(targetObject, 1);
-                                choiceAction = 0;       // 초기화
-                            }
-                            else
-                            {
-                                Debug.Log("MP가 부족합니다 행동을 재선택하세요");
-                                choiceAction = 0;
-                            }
-                        }
-                        else if (choiceAction == 3) // 행동이 3번이면
-                        {
-                            if (MP >= costB)
-                            {
-                                Attack(targetObject, 2);
-                                choiceAction = 0;       // 초기화
-                            }
-                            else
-                            {
-                                Debug.Log("MP가 부족합니다 행동을 재선택하세요");
-                                choiceAction = 0;
-                            }
-                        }
+                        ChoiceAction(targetObject, choiceAction);
                     }
                 }
             }
@@ -155,8 +89,7 @@ public class PlayerBase : CharacterBase
                 }
                 else skill = (Strike * (StrikeMultiple * ASkillCoefficient) + Intelligent * IntelligentMultiple);
                 Debug.Log($"1번 스킬로 {skill}만큼 {target}에게 피해를 주었다.");
-                // Debug.Log($"현재 마나는 {MP}");
-                target.getDemage(skill, 0);
+                target.GetDemage(skill, 0);
                 
                 break;
             case 2:
@@ -167,32 +100,71 @@ public class PlayerBase : CharacterBase
                 }
                 else skill = (Strike * (StrikeMultiple * BSkillCoefficient) + Intelligent * IntelligentMultiple);
                 Debug.Log($"2번 스킬로 {skill}만큼 {target}에게 피해를 주었다.");
-                // Debug.Log($"현재 마나는 {MP}");
-                target.getDemage(skill, 0);
+                target.GetDemage(skill, 0);
                 break;
         }
         
     }
 
+    /// <summary>
+    /// 캐릭터 선택 이후
+    /// </summary>
+    /// <param name="targetObject">공격 대상</param>
+    /// <param name="choiceAction">평타,스킬 선택</param>
+    void ChoiceAction(CharacterBase targetObject, int choiceAction)
+    {
+        if (choiceAction == 1)  // 행동이 1번이면
+        {
+            Attack(targetObject, 0);
+        }
+        else if (choiceAction == 2) // 행동이 2번이면
+        {
+            if (MP >= costA)
+            {
+                Attack(targetObject, 1);
+            }
+            else
+            {
+                LackMP();
+            }
+        }
+        else if (choiceAction == 3) // 행동이 3번이면
+        {
+            if (MP >= costB)
+            {
+                Attack(targetObject, 2);
+            }
+            else
+            {
+                LackMP();
+            }
+        }
+    }
+
+    /// <summary>
+    /// 마나 부족시 불러올 함수
+    /// </summary>
+    void LackMP()
+    {
+        Debug.Log("MP가 부족합니다 행동을 재선택하세요");
+        Update();
+    }
 
     private void B1(InputAction.CallbackContext value)     // 일반공격 선택시(키보드 1)
     {
         Debug.Log("기본공격 선택");
         choiceAction = 1;
-        // enemy1.getDemage(5, 0);
     }
 
     private void B2(InputAction.CallbackContext value)     // 스킬공격 선택시(키보드 2)
     {
         Debug.Log("1번 스킬 선택");
         choiceAction = 2;
-        // enemy2.getDemage(5, 0);
     }
 
     private void B3(InputAction.CallbackContext value)     // 스킬공격 선택시(키보드 3)
     {
         Debug.Log("2번 스킬 선택");
         choiceAction = 3;
-        // enemy3.getDemage(5, 0);
     }
 }
