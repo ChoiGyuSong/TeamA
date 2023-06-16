@@ -51,6 +51,7 @@ public class PlayerBase : CharacterBase
                     {
                         ChoiceAction(targetObject, choiceAction);
                     }
+                    choiceAction = 0;   //초기화
                 }
             }
         }
@@ -147,7 +148,6 @@ public class PlayerBase : CharacterBase
     void LackMP()
     {
         Debug.Log("MP가 부족합니다 행동을 재선택하세요");
-        Update();
     }
 
     private void B1(InputAction.CallbackContext value)     // 일반공격 선택시(키보드 1)
