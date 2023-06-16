@@ -2,27 +2,53 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class EnemyBase : CharacterBase
 {
-    int randAttack = Random.Range(0, 3);
+    PlayerInputAction inputActions;
+    Player1 player1;
+    Player2 player2;
+    Player3 player3;
 
     protected override void Awake()
     {
         base.Awake();
+        player1 = FindObjectOfType<Player1>();
+        player2 = FindObjectOfType<Player2>();
+        player3 = FindObjectOfType<Player3>();
+        inputActions = new PlayerInputAction();
+    }
+    private void OnEnable()
+    {
+        inputActions.Player.Enable();
+        inputActions.Player.B1.performed += test1;
     }
 
-    protected override void Attack(CharacterBase target, int attackType)
+    private void OnDisable()
     {
-        base.Attack(target, attackType);
+        inputActions.Player.Disable();
+        inputActions.Player.B1.performed -= test1;
     }
 
-    IEnumerator EnemyAttack()
+    private void test1(InputAction.CallbackContext context)
     {
-        if(randAttack == 0)
+        OnAttack();
+    }
+
+    private void OnAttack()
+    {
+        switch (Random.Range(0, 3))
         {
-
-            yield break;
+            case 0:
+                Attack(player1, 0);
+                break;
+            case 1:
+                Attack(player2, 0);
+                break;
+            case 2:
+                Attack(player3, 0);
+                break;
         }
     }
 }
