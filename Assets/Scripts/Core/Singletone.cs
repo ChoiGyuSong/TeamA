@@ -36,8 +36,10 @@ public class Singleton<T> : MonoBehaviour where T : Component
                 if (sigleton == null)                       // 씬에 싱글톤이 있는지 확인
                 {
                     // 씬에도 싱글톤이 없다.
-                    GameObject gameObj = new GameObject();  // 빈오브젝트 만들고
-                    gameObj.name = $"{typeof(T).Name} Singleton";   // 이름 수정하고
+                    GameObject gameObj = new()
+                    {
+                        name = $"{typeof(T).Name} Singleton"   // 이름 수정하고
+                    };  // 빈오브젝트 만들고
                     sigleton = gameObj.AddComponent<T>();   // 싱글톤 컴포넌트 추가  
                 }
                 instance = sigleton;                        // instance에 찾았거나 만들어진 객체 대입
