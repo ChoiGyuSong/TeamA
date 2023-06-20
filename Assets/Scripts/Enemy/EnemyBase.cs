@@ -8,9 +8,11 @@ public class EnemyBase : CharacterBase
 <<<<<<< Updated upstream
 =======
     PlayerInputAction inputActions;
+
     Player1 player1;
     Player2 player2;
     Player3 player3;
+    protected int damagetype = 0;
 
     protected override void Awake()
     {
@@ -37,15 +39,26 @@ public class EnemyBase : CharacterBase
         OnAttack();
     }
 
-    private void OnAttack()
+    protected virtual void OnAttack()
     {
         switch(Random.Range(0, 3))
         {
+<<<<<<< Updated upstream
             case 0:Attack(player1, 0);
                 break;
             case 1:Attack(player2, 0);
                 break;
             case 2:Attack(player3, 0);
+=======
+            case 0:
+                Attack(player1, damagetype);
+                break;
+            case 1:
+                Attack(player2, damagetype);
+                break;
+            case 2:
+                Attack(player3, damagetype);
+>>>>>>> Stashed changes
                 break;
         }
     }

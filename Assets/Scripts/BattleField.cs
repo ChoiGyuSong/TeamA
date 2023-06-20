@@ -5,6 +5,7 @@ using UnityEngine.InputSystem;
 
 public class BattleField : MonoBehaviour
 {
+<<<<<<< Updated upstream
     // 변수 만들어서 캐릭터 저장
     // 
     public PoolObjectType warriorObj;
@@ -48,4 +49,7 @@ public class BattleField : MonoBehaviour
         Debug.Log($"{mage}Skill");
         mage.getDemage(5, 1);
     }
+=======
+
+>>>>>>> Stashed changes
 }

@@ -22,10 +22,10 @@ public class CharacterBase : MonoBehaviour
     public float MaxHp = 100f;
     public float MaxMp = 100f;
     //스탯 배수 설정
-    public float StrikeMultiple;
-    public float IntelligentMultiple;
-    public float DefenceMultiple;
-    public float AntiMultiple;
+    public float StrikeMultiple = 1f;
+    public float IntelligentMultiple = 1f;
+    public float DefenceMultiple = 1f;
+    public float AntiMultiple = 1f;
     //치명타 배수
     public float Critical = 2f;
     //임시 데미지 이펙트 시간
