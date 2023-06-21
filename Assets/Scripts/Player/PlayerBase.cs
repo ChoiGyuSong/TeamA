@@ -28,8 +28,15 @@ public class PlayerBase : CharacterBase
         base.Awake();
         inputAction = new PlayerInputAction();
     }
-
-    private void Update()
+    private void Start()
+    {
+        PlayerAttack();
+    }
+    private void PlayerAttack()
+    {
+        StartCoroutine(AttackCoroutine());
+    }
+    IEnumerator AttackCoroutine()
     {
         if (Input.GetMouseButtonDown(0))    // 마우스 클릭되었을때
         {
@@ -55,6 +62,7 @@ public class PlayerBase : CharacterBase
                 }
             }
         }
+        yield return null;
     }
 
     private void OnEnable()     // inputAction 활성화
@@ -104,7 +112,6 @@ public class PlayerBase : CharacterBase
                 target.GetDemage(skill, 0);
                 break;
         }
-        
     }
 
     /// <summary>
