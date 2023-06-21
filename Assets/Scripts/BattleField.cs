@@ -5,31 +5,32 @@ using UnityEngine.InputSystem;
 
 public class BattleField : MonoBehaviour
 {
-    PlayerInputAction inputAction;
+    Player1 player1;
+    Player2 player2;
+    Player3 player3;
+    Enemy1 enemy1;
+    Enemy2 enemy2;
+    Enemy3 enemy3;
+    GameObject enemyBase;
 
     private void Awake()
     {
-        inputAction = new PlayerInputAction();
+        player1 = GetComponent<Player1>();
+        player2 = GetComponent<Player2>();
+        player3 = GetComponent<Player3>();
+        /*enemy1 = GetComponent<Enemy1>();
+        enemy2 = GetComponent<Enemy2>();
+        enemy3 = GetComponent<Enemy3>();*/
+        enemyBase = GameObject.FindObjectOfType<EnemyBase>().gameObject;
     }
-
-    private void OnEnable()
+    private void Start()
     {
-        inputAction.Player.Enable();
-        inputAction.Player.Attack.performed += OnAttack;
-        inputAction.Player.Skill.performed += OnSkill;
-    }
-    private void OnDisable()
-    {
-        inputAction.Player.Skill.performed -= OnSkill;
-        inputAction.Player.Attack.performed -= OnAttack;
-        inputAction.Player.Disable();
-    }
-
-    private void OnAttack(InputAction.CallbackContext context)
-    {
-    }
-
-    private void OnSkill(InputAction.CallbackContext context)
-    {
+        for(int i = 0;i <3;i++)
+        {
+            /*enemy1.EnemyAttack();
+            enemy2.EnemyAttack();
+            enemy3.EnemyAttack();*/
+            enemyBase.GetComponent<EnemyBase>().EnemyAttack();
+        }
     }
 }
