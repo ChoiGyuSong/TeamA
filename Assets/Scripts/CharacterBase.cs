@@ -5,6 +5,7 @@ using UnityEngine;
 
 public class CharacterBase : MonoBehaviour
 {
+    public bool attack = false;
     //최종 데미지
     float Damage;
     //기본 스탯
@@ -15,6 +16,7 @@ public class CharacterBase : MonoBehaviour
     public float Anti = 1f;
     float hp;
     float mp;
+    public float speed = 60f;
     //최대 마나체력
     public float MaxHp = 100f;
     public float MaxMp = 100f;
@@ -48,7 +50,7 @@ public class CharacterBase : MonoBehaviour
             }
         }
     }
-    protected virtual float MP
+    public virtual float MP
     {
         get => mp;
         set
@@ -57,6 +59,23 @@ public class CharacterBase : MonoBehaviour
             {
                 mp = value;
                 Debug.Log($"현재 마나는 {mp}");
+            }
+        }
+    }
+
+    public virtual float Turn
+    {
+        get => speed;
+        set
+        {
+            if(speed != value)
+            {
+                speed = value;
+                if(speed > 100f)
+                {
+                    speed -= 100f;
+                    attack = true;
+                }
             }
         }
     }

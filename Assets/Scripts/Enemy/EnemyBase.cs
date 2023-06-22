@@ -21,17 +21,23 @@ public class EnemyBase : CharacterBase
 
     public virtual void EnemyAttack()
     {
-        switch (Random.Range(0, 3))
+        if (attack)
         {
-            case 0:
-                Attack(player1, damagetype);
-                break;
-            case 1:
-                Attack(player2, damagetype);
-                break;
-            case 2:
-                Attack(player3, damagetype);
-                break;
+            switch (Random.Range(0, 3))
+            {
+                case 0:
+                    Attack(player1, damagetype);
+                    break;
+                case 1:
+                    Attack(player2, damagetype);
+                    break;
+                case 2:
+                    Attack(player3, damagetype);
+                    break;
+            }
+            attack = false;
         }
+        Debug.Log("ео а╬╥А");
+        Turn += speed;
     }
 }
