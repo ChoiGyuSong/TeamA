@@ -29,7 +29,11 @@ public class CharacterBase : MonoBehaviour
     public float Critical = 2f;
     //임시 데미지 이펙트 시간
     public float AnimationTime = 1f;
+
+    public int a;
+
     //마나 체력 받기
+    BattleField battleField;
     public float HP
     {
         get => hp;
@@ -85,6 +89,7 @@ public class CharacterBase : MonoBehaviour
     /// </summary>
     protected virtual void Awake()
     {
+        battleField = FindObjectOfType<BattleField>();
         // enemy = find
         //CharacterStats();
         //Hit = transform.GetChild(0).gameObject;
@@ -125,6 +130,6 @@ public class CharacterBase : MonoBehaviour
     /// </summary>
     protected virtual void Die()
     {
-        Debug.Log("Die");
+        Debug.Log($"{gameObject} Die");
     }
 }

@@ -26,14 +26,13 @@ public class BattleField : MonoBehaviour
     }
     private void Start()
     {
-        for(int i = 0;i <6;i++)
+        while(true)
         {
             turn++;
             Debug.Log($"{turn}¹øÂ° ÅÏ");
             /*enemy1.EnemyAttack();
             enemy2.EnemyAttack();
             enemy3.EnemyAttack();*/
-            enemyBase.GetComponent<EnemyBase>().EnemyAttack();
         }
     }
 }

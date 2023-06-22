@@ -10,6 +10,9 @@ public class EnemyBase : CharacterBase
     Player2 player2;
     Player3 player3;
     public int damagetype = 0;
+    public int DeadCount = 0;
+
+    public System.Action<int> EnemyDie;
 
     protected override void Awake()
     {
@@ -39,5 +42,12 @@ public class EnemyBase : CharacterBase
         }
         Debug.Log("ео а╬╥А");
         Turn += speed;
+    }
+
+    protected override void Die()
+    {
+        DeadCount += 1;
+        EnemyDie?.Invoke(DeadCount);
+        base.Die();
     }
 }

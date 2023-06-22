@@ -23,10 +23,13 @@ public class PlayerBase : CharacterBase
     public int costA = 20;
     public int costB = 30;
 
+    public System.Action<int> PlayerDie;
+
     protected override void Awake()
     {
         base.Awake();
         inputAction = new PlayerInputAction();
+        PlayerDie?.Invoke(0);
     }
     private void Start()
     {
@@ -173,5 +176,11 @@ public class PlayerBase : CharacterBase
     {
         Debug.Log("2번 스킬 선택");
         choiceAction = 3;
+    }
+
+    protected override void Die()
+    {
+        a = 0;
+        base.Die();
     }
 }
