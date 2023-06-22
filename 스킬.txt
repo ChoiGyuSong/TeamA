@@ -1,0 +1,74 @@
+private void SkillA(CharacterBase target, int jobnumber)
+    {
+        
+        if (jobnumber == 1)
+        {
+            MP -= costA;
+            if (Random.Range(0, 100) < Agility)
+            {
+                skill = (Strike * (StrikeMultiple * ASkillCoefficient) + Intelligent * IntelligentMultiple) * Critical;
+            }
+            else skill = (Strike * (StrikeMultiple * ASkillCoefficient) + Intelligent * IntelligentMultiple);
+            Debug.Log($"일격 스킬로 {skill}만큼 {target}에게 물리피해를 주었다.");
+            target.GetDemage(skill, 0);
+        }
+        else if (jobnumber == 2)
+        {
+            MP -= costA;
+            if (Random.Range(0, 100) < Agility)
+            {
+                skill = (Strike * (StrikeMultiple * ASkillCoefficient) + Intelligent * IntelligentMultiple) * Critical;
+            }
+            else skill = (Strike * (StrikeMultiple * ASkillCoefficient) + Intelligent * IntelligentMultiple);
+            Debug.Log($"차지샷으로 {skill}만큼 {target}에게 물리피해를 주었다.");
+            target.GetDemage(skill, 0);
+        }
+        else if(jobnumber == 3)
+        {
+            MP -= costA;
+            if (Random.Range(0, 100) < Agility)
+            {
+                skill = (Strike * (StrikeMultiple * ASkillCoefficient) + Intelligent * IntelligentMultiple) * Critical;
+            }
+            else skill = (Strike * (StrikeMultiple * ASkillCoefficient) + Intelligent * IntelligentMultiple);
+            Debug.Log($"파이어 마법으로 {skill}만큼 {target}에게 마법피해를 주었다.");
+            target.GetDemage(skill, 1);
+        }
+    }
+
+    private void SkillB(CharacterBase target, int jobnumber)
+    {
+        if (jobnumber == 1)
+        {
+            MP -= costB;
+            if (Random.Range(0, 100) < Agility)
+            {
+                skill = (Strike * (StrikeMultiple * BSkillCoefficient) + Intelligent * IntelligentMultiple) * Critical;
+            }
+            else skill = (Strike * (StrikeMultiple * BSkillCoefficient) + Intelligent * IntelligentMultiple);
+            Debug.Log($"2연격으로 {skill}만큼 {target}에게 물리피해를 주었다.");
+            target.GetDemage(skill, 0);
+        }
+        else if (jobnumber == 2)
+            {
+            MP -= costB;
+            if (Random.Range(0, 100) < Agility)
+            {
+                skill = (Strike * (StrikeMultiple * BSkillCoefficient) + Intelligent * IntelligentMultiple) * Critical;
+            }
+            else skill = (Strike * (StrikeMultiple * BSkillCoefficient) + Intelligent * IntelligentMultiple);
+            Debug.Log($"더블샷으로 {skill}만큼 {target}에게 물리피해를 주었다.");
+            target.GetDemage(skill, 0);
+        }
+        else if (jobnumber == 3)
+            {
+            MP -= costB;
+            if (Random.Range(0, 100) < Agility)
+            {
+                skill = (Strike * (StrikeMultiple * BSkillCoefficient) + Intelligent * IntelligentMultiple) * Critical;
+            }
+            else skill = (Strike * (StrikeMultiple * BSkillCoefficient) + Intelligent * IntelligentMultiple);
+            Debug.Log($"아이스 마법으로 {skill}만큼 {target}에게 마법피해를 주었다.");
+            target.GetDemage(skill, 0);
+        }
+    }
