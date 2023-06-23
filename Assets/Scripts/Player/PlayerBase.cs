@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 using static UnityEditor.PlayerSettings;
 
@@ -23,49 +24,45 @@ public class PlayerBase : CharacterBase
     public int costA = 20;
     public int costB = 30;
 
-    public System.Action<int> PlayerDie;
+    Vector3 testMousePosition;
+
+    int enemy = 0;
 
     protected override void Awake()
     {
         base.Awake();
         inputAction = new PlayerInputAction();
-        PlayerDie?.Invoke(0);
     }
-    private void Start()
-    {
-        PlayerAttack();
-    }
+    //          private void Start()
+    //          {
+    //          StartCoroutine(AttackCoroutine());
+    //          }
+
+
+
     private void PlayerAttack()
     {
-        StartCoroutine(AttackCoroutine());
-    }
-    IEnumerator AttackCoroutine()
-    {
-        if (Input.GetMouseButtonDown(0))    // 마우스 클릭되었을때
-        {
-            mousePosition = Input.mousePosition;    // 마우스 포지션을 저장
-            Vector2 pos = Camera.main.ScreenToWorldPoint(mousePosition);    // 마우스 클릭 위치를 카메라 위치에 맞게 변경
+        mousePosition = Input.mousePosition;    // 마우스 포지션을 저장
+        Vector2 pos = Camera.main.ScreenToWorldPoint(mousePosition);    // 마우스 클릭 위치를 카메라 위치에 맞게 변경
 
-            RaycastHit2D hit = Physics2D.Raycast(pos, Vector2.zero);    // collider를 hit에 리턴
-            if (choiceAction != 0)      // 캐릭터 행동 선택이 0이 아닐시
+        RaycastHit2D hit = Physics2D.Raycast(pos, Vector2.zero);    // collider를 hit에 리턴
+        if (choiceAction != 0)      // 캐릭터 행동 선택이 0이 아닐시
+        {
+            if (hit.collider != null)   // 콜라이더 선택이 null이 아닐시(클릭을 콜라이더에 했을때)
             {
-                if (hit.collider != null)   // 콜라이더 선택이 null이 아닐시(클릭을 콜라이더에 했을때)
+                clickObject = hit.collider.gameObject;
+                targetObject = clickObject.GetComponent<CharacterBase>();
+                if (hit.collider.gameObject.name == "Enemy1")
                 {
-                    clickObject = hit.collider.gameObject;
-                    targetObject = clickObject.GetComponent<CharacterBase>();
-                    if (hit.collider.gameObject.name == "Enemy1")
-                    {
-                        ChoiceAction(targetObject, choiceAction);
-                    }
-                    else if (hit.collider.gameObject.name == "Enemy2")
-                    {
-                        ChoiceAction(targetObject, choiceAction);
-                    }
-                    choiceAction = 0;   //초기화
+                    ChoiceAction(targetObject, choiceAction);
                 }
+                else if (hit.collider.gameObject.name == "Enemy2")
+                {
+                    ChoiceAction(targetObject, choiceAction);
+                }
+                choiceAction = 0;   //초기화
             }
         }
-        yield return null;
     }
 
     private void OnEnable()     // inputAction 활성화
@@ -74,12 +71,14 @@ public class PlayerBase : CharacterBase
         inputAction.Player.B1.performed += B1;  // 기본공격 선택 활성화
         inputAction.Player.B2.performed += B2;  // 스킬 선택 활성화
         inputAction.Player.B3.performed += B3;  // 적 선택 활성화
+        inputAction.Player.Mouse.performed += MouseClick;
     }
 
 
 
     private void OnDisable()    // inputAction 비활성화
     {
+        inputAction.Player.Mouse.performed -= MouseClick;
         inputAction.Player.B1.performed -= B1;  // 적 선택 비활성화
         inputAction.Player.B2.performed -= B2;  // 스킬 선택 비활성화
         inputAction.Player.B3.performed -= B3;  // 기본공격 선택 비활성화
@@ -152,6 +151,7 @@ public class PlayerBase : CharacterBase
         }
     }
 
+    
     /// <summary>
     /// 마나 부족시 불러올 함수
     /// </summary>
@@ -177,10 +177,9 @@ public class PlayerBase : CharacterBase
         Debug.Log("2번 스킬 선택");
         choiceAction = 3;
     }
-
-    protected override void Die()
+    
+    private void MouseClick(InputAction.CallbackContext value)
     {
-        a = 0;
-        base.Die();
+        PlayerAttack();
     }
 }
