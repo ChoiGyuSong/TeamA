@@ -42,7 +42,7 @@ public class PlayerBase : CharacterBase
 
     public void PlayerAttack()
     {
-        if (attack && !IsDead)
+        if (attack)
         {
             mousePosition = Input.mousePosition;    // 마우스 포지션을 저장
             Vector2 pos = Camera.main.ScreenToWorldPoint(mousePosition);    // 마우스 클릭 위치를 카메라 위치에 맞게 변경

@@ -24,7 +24,7 @@ public class EnemyBase : CharacterBase
 
     public virtual void EnemyAttack()
     {
-        if (attack && !IsDead)
+        if (attack)
         {
             switch (Random.Range(0, 3))
             {
