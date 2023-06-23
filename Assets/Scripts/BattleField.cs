@@ -2,27 +2,27 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using static UnityEditor.Experimental.GraphView.GraphView;
 
 public class BattleField : MonoBehaviour
 {
-    // Player1 player1;
-    // Player2 player2;
-    // Player3 player3;
-    // Enemy1 enemy1;
-    // Enemy2 enemy2;
-    // Enemy3 enemy3;
-    GameObject enemyBase;
+    GameObject player1;
+    GameObject player2;
+    GameObject player3;
+    GameObject enemy1;
+    GameObject enemy2;
+    GameObject enemy3;
     int turn = 0;
+    public int enemyDie = 0;
 
     private void Awake()
     {
-        // player1 = GetComponent<Player1>();
-        // player2 = GetComponent<Player2>();
-        // player3 = GetComponent<Player3>();
-        /*enemy1 = GetComponent<Enemy1>();
-        enemy2 = GetComponent<Enemy2>();
-        enemy3 = GetComponent<Enemy3>();*/
-        enemyBase = GameObject.FindObjectOfType<EnemyBase>().gameObject;
+        player1 = GameObject.FindObjectOfType<Player1>().gameObject;
+        player2 = GameObject.FindObjectOfType<Player2>().gameObject;
+        player3 = GameObject.FindObjectOfType<Player3>().gameObject;
+        enemy1 = GameObject.FindObjectOfType<Enemy1>().gameObject;
+        enemy2 = GameObject.FindObjectOfType<Enemy2>().gameObject;
+        enemy3 = GameObject.FindObjectOfType<Enemy3>().gameObject;
     }
     private void Start()
     {
@@ -30,9 +30,12 @@ public class BattleField : MonoBehaviour
         {
             turn++;
             Debug.Log($"{turn}¹øÂ° ÅÏ");
-            /*enemy1.EnemyAttack();
-            enemy2.EnemyAttack();
-            enemy3.EnemyAttack();*/
+            player1.GetComponent<Player1>().PlayerAttack();
+            player2.GetComponent<Player2>().PlayerAttack();
+            player3.GetComponent<Player3>().PlayerAttack();
+            enemy1.GetComponent<Enemy1>().EnemyAttack();
+            enemy2.GetComponent<Enemy2>().EnemyAttack();
+            enemy3.GetComponent<Enemy3>().EnemyAttack();
         }
     }
 }

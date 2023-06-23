@@ -6,6 +6,7 @@ using UnityEngine;
 public class CharacterBase : MonoBehaviour
 {
     public bool attack = false;
+    public bool IsDead = false;
     //최종 데미지
     float Damage;
     //기본 스탯
@@ -130,6 +131,7 @@ public class CharacterBase : MonoBehaviour
     /// </summary>
     protected virtual void Die()
     {
+        IsDead = true;
         Debug.Log($"{gameObject} Die");
     }
 }

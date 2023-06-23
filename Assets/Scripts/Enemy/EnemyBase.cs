@@ -9,10 +9,9 @@ public class EnemyBase : CharacterBase
     Player1 player1;
     Player2 player2;
     Player3 player3;
+    BattleField battleField;
     public int damagetype = 0;
     public int DeadCount = 0;
-
-    public System.Action<int> EnemyDie;
 
     protected override void Awake()
     {
@@ -20,11 +19,12 @@ public class EnemyBase : CharacterBase
         player1 = FindObjectOfType<Player1>();
         player2 = FindObjectOfType<Player2>();
         player3 = FindObjectOfType<Player3>();
+        battleField = GetComponent<BattleField>();
     }
 
     public virtual void EnemyAttack()
     {
-        if (attack)
+        if (attack && !IsDead)
         {
             switch (Random.Range(0, 3))
             {
@@ -46,8 +46,7 @@ public class EnemyBase : CharacterBase
 
     protected override void Die()
     {
-        DeadCount += 1;
-        EnemyDie?.Invoke(DeadCount);
+        battleField.enemyDie++;
         base.Die();
     }
 }
