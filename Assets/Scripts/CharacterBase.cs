@@ -32,9 +32,6 @@ public class CharacterBase : MonoBehaviour
     public float AnimationTime = 1f;
 
     public int a;
-
-
-    //마나 체력 받기
     public float HP
     {
         get => hp;

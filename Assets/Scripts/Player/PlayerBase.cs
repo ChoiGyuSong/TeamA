@@ -25,48 +25,61 @@ public class PlayerBase : CharacterBase
     public int costB = 30;
 
     public bool playerLose = false;
+    GameManager GM;
+
+
+    int enemy = 0;
 
     protected override void Awake()
     {
         base.Awake();
         inputAction = new PlayerInputAction();
     }
+    protected override void Start()
+    {
+    }
+
+    private void Update()
+    {
+
+    }
+
 
     public void PlayerAttack()
     {
         if (IsDead == false)
-        if (attack)
-        {
-            mousePosition = Input.mousePosition;    // 마우스 포지션을 저장
-            Vector2 pos = Camera.main.ScreenToWorldPoint(mousePosition);    // 마우스 클릭 위치를 카메라 위치에 맞게 변경
-
-            RaycastHit2D hit = Physics2D.Raycast(pos, Vector2.zero);    // collider를 hit에 리턴
-            if (choiceAction != 0)      // 캐릭터 행동 선택이 0이 아닐시
+            if (attack)
             {
-                if (hit.collider != null)   // 콜라이더 선택이 null이 아닐시(클릭을 콜라이더에 했을때)
+                mousePosition = Input.mousePosition;    // 마우스 포지션을 저장
+                Vector2 pos = Camera.main.ScreenToWorldPoint(mousePosition);    // 마우스 클릭 위치를 카메라 위치에 맞게 변경
+
+                RaycastHit2D hit = Physics2D.Raycast(pos, Vector2.zero);    // collider를 hit에 리턴
+                if (choiceAction != 0)      // 캐릭터 행동 선택이 0이 아닐시
                 {
-                    clickObject = hit.collider.gameObject;
-                    targetObject = clickObject.GetComponent<CharacterBase>();
-                    if (hit.collider.gameObject.name == "Enemy1")
+                    if (hit.collider != null)   // 콜라이더 선택이 null이 아닐시(클릭을 콜라이더에 했을때)
                     {
-                        ChoiceAction(targetObject, choiceAction);
-                    }
-                    else if (hit.collider.gameObject.name == "Enemy2")
-                    {
-                        ChoiceAction(targetObject, choiceAction);
-                    }
-                    else if (hit.collider.gameObject.name == "Enemy3")
-                    {
-                        ChoiceAction(targetObject, choiceAction);
-                    }
-                    else if (hit.collider.gameObject.name == "Boss")
-                    {
-                        ChoiceAction(targetObject, choiceAction);
+                        clickObject = hit.collider.gameObject;
+                        targetObject = clickObject.GetComponent<CharacterBase>();
+                        if (hit.collider.gameObject.name == "Enemy1")
+                        {
+                            ChoiceAction(targetObject, choiceAction);
+                        }
+                        else if (hit.collider.gameObject.name == "Enemy2")
+                        {
+                            ChoiceAction(targetObject, choiceAction);
+                        }
+                        else if (hit.collider.gameObject.name == "Enemy3")
+                        {
+                            ChoiceAction(targetObject, choiceAction);
+                        }
+                        else if (hit.collider.gameObject.name == "Boss")
+                        {
+                            ChoiceAction(targetObject, choiceAction);
+                        }
                     }
                 }
+                attack = false;
             }
-            attack = false;
-        }
         Turn += speed;
 
     }

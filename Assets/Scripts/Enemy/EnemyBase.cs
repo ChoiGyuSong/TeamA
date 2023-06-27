@@ -26,6 +26,10 @@ public class EnemyBase : CharacterBase
     }
 
 
+    private void Update()
+    {
+    }
+
     public virtual void EnemyAttack()
     {
         if (attack == true && IsDead == false)
