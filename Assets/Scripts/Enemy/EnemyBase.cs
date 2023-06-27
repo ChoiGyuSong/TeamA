@@ -9,9 +9,12 @@ public class EnemyBase : CharacterBase
     Player1 player1;
     Player2 player2;
     Player3 player3;
-    BattleField battleField;
+    GameManager gameManager;
     public int damagetype = 0;
     public int DeadCount = 0;
+    public int enemyDie = 0;
+    public bool enemyLose = false;
+
 
     protected override void Awake()
     {
@@ -19,12 +22,17 @@ public class EnemyBase : CharacterBase
         player1 = FindObjectOfType<Player1>();
         player2 = FindObjectOfType<Player2>();
         player3 = FindObjectOfType<Player3>();
-        battleField = GetComponent<BattleField>();
+        gameManager = FindObjectOfType<GameManager>();
+    }
+
+ 
+    private void Update()
+    {
     }
 
     public virtual void EnemyAttack()
     {
-        if (attack && !IsDead)
+        if (attack == true && IsDead == false)
         {
             switch (Random.Range(0, 3))
             {
@@ -40,13 +48,13 @@ public class EnemyBase : CharacterBase
             }
             attack = false;
         }
-        Debug.Log("턴 종료");
         Turn += speed;
     }
 
     protected override void Die()
     {
-        battleField.enemyDie++;
         base.Die();
+        Debug.Log("적이 사망하였습니다.");
+        gameManager.EnemyDied();
     }
 }

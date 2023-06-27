@@ -24,7 +24,9 @@ public class PlayerBase : CharacterBase
     public int costA = 20;
     public int costB = 30;
 
-    Vector3 testMousePosition;
+    public bool playerLose = false;
+    GameManager GM;
+
 
     int enemy = 0;
 
@@ -33,16 +35,19 @@ public class PlayerBase : CharacterBase
         base.Awake();
         inputAction = new PlayerInputAction();
     }
-    //          private void Start()
-    //          {
-    //          StartCoroutine(AttackCoroutine());
-    //          }
+    protected override void Start()
+    {
+    }
 
+    private void Update()
+    {
+        
+    }
 
 
     public void PlayerAttack()
     {
-        if (attack && !IsDead)
+        if (IsDead == false)
         {
             mousePosition = Input.mousePosition;    // 마우스 포지션을 저장
             Vector2 pos = Camera.main.ScreenToWorldPoint(mousePosition);    // 마우스 클릭 위치를 카메라 위치에 맞게 변경
@@ -62,12 +67,18 @@ public class PlayerBase : CharacterBase
                     {
                         ChoiceAction(targetObject, choiceAction);
                     }
-                    choiceAction = 0;   //초기화
+                    else if (hit.collider.gameObject.name == "Enemy3")
+                    {
+                        ChoiceAction(targetObject, choiceAction);
+                    }
+                    else if (hit.collider.gameObject.name == "Boss")
+                    {
+                        ChoiceAction(targetObject, choiceAction);
+                    }
                 }
             }
             attack = false;
         }
-        Debug.Log("턴 종료");
         Turn += speed;
 
     }
@@ -97,15 +108,25 @@ public class PlayerBase : CharacterBase
         switch (attackType)
         {
             case 0:
-                base.Attack(target,0);
+                if (target.IsDead == false)
+                {
+                    base.Attack(target, 0);
+                    choiceAction = 0;   //초기화
+                }
+                else
+                {
+                    Debug.Log("해당적은 이미 죽었습니다");
+                }
                 break;
             case 1:
                 MP -= costA;
                 if (Random.Range(0, 100) < Agility)
                 {
                     skill = (Strike * (StrikeMultiple * ASkillCoefficient) + Intelligent * IntelligentMultiple) * Critical;
+                    choiceAction = 0;   //초기화
                 }
                 else skill = (Strike * (StrikeMultiple * ASkillCoefficient) + Intelligent * IntelligentMultiple);
+                choiceAction = 0;   //초기화
                 Debug.Log($"1번 스킬로 {skill}만큼 {target}에게 피해를 주었다.");
                 target.GetDemage(skill, 0);
                 
@@ -188,5 +209,11 @@ public class PlayerBase : CharacterBase
     private void MouseClick(InputAction.CallbackContext value)
     {
         PlayerAttack();
+    }
+
+    protected override void Die()
+    {
+        base.Die();
+        // GM.PlayerDied();
     }
 }

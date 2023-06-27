@@ -22,16 +22,17 @@ public class CharacterBase : MonoBehaviour
     public float MaxHp = 100f;
     public float MaxMp = 100f;
     //스탯 배수 설정
-    public float StrikeMultiple;
-    public float IntelligentMultiple;
-    public float DefenceMultiple;
-    public float AntiMultiple;
+    public float StrikeMultiple = 1.0f;
+    public float IntelligentMultiple = 1.0f;
+    public float DefenceMultiple = 1.0f;
+    public float AntiMultiple =  1.0f;
     //치명타 배수
     public float Critical = 2f;
     //임시 데미지 이펙트 시간
     public float AnimationTime = 1f;
 
     public int a;
+
 
     //마나 체력 받기
     BattleField battleField;
@@ -42,10 +43,10 @@ public class CharacterBase : MonoBehaviour
         {
             if(hp != value)
             {
+                hp = value;
                 if (hp > 0)
                 {
-                    hp = value;
-                    Debug.Log(HP);
+                    Debug.Log($"남은체력 {HP}");
                 }
                 else
                 {
@@ -73,18 +74,26 @@ public class CharacterBase : MonoBehaviour
         get => speed;
         set
         {
-            if(speed != value)
+            if(IsDead == false)
             {
-                speed = value;
-                if(speed > 100f)
+                if (speed != value)
                 {
-                    speed -= 100f;
-                    attack = true;
+                    speed = value;
+                    if (speed > 100f)
+                    {
+                        speed -= 100f;
+                        attack = true;
+                    }
                 }
             }
+           
         }
     }
-    
+    protected virtual void Start()
+    {
+        
+    }
+
     /// <summary>
     /// 캐릭터 스탯
     /// </summary>
@@ -98,6 +107,8 @@ public class CharacterBase : MonoBehaviour
         hp = MaxHp;
         mp = MaxMp;
     }
+
+  
 
     /// <summary>
     /// 주는 데미지
@@ -132,6 +143,5 @@ public class CharacterBase : MonoBehaviour
     protected virtual void Die()
     {
         IsDead = true;
-        Debug.Log($"{gameObject} Die");
     }
 }
