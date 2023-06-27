@@ -74,12 +74,21 @@ public class CharacterBase : MonoBehaviour
         get => speed;
         set
         {
+<<<<<<< HEAD
             if(IsDead == false)
             {
                 if (speed != value)
                 {
                     speed = value;
                     if (speed > 100f)
+=======
+            if (!IsDead)
+            {
+                if(speed != value)
+                {
+                    speed = value;
+                    if(speed > 100f)
+>>>>>>> 95aa2cf19a6e7df33acc7b73e045be717cd2373c
                     {
                         speed -= 100f;
                         attack = true;
@@ -143,5 +152,9 @@ public class CharacterBase : MonoBehaviour
     protected virtual void Die()
     {
         IsDead = true;
+<<<<<<< HEAD
+=======
+        Debug.Log($"{this.gameObject} Die");
+>>>>>>> 95aa2cf19a6e7df33acc7b73e045be717cd2373c
     }
 }

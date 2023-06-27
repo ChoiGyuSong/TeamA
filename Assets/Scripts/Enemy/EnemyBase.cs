@@ -32,7 +32,11 @@ public class EnemyBase : CharacterBase
 
     public virtual void EnemyAttack()
     {
+<<<<<<< HEAD
         if (attack == true && IsDead == false)
+=======
+        if (attack)
+>>>>>>> 95aa2cf19a6e7df33acc7b73e045be717cd2373c
         {
             switch (Random.Range(0, 3))
             {
