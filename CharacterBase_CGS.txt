@@ -1,0 +1,147 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEditor.Experimental.GraphView;
+using UnityEngine;
+
+public class CharacterBase : MonoBehaviour
+{
+    public bool attack = false;
+    public bool IsDead = false;
+    //최종 데미지
+    float Damage;
+    //기본 스탯
+    public float Strike = 1f;
+    public float Intelligent = 1f;
+    public float Agility = 1f;
+    public float Defence = 1f;
+    public float Anti = 1f;
+    float hp;
+    float mp;
+    public float speed = 60f;
+    //최대 마나체력
+    public float MaxHp = 100f;
+    public float MaxMp = 100f;
+    //스탯 배수 설정
+    public float StrikeMultiple = 1.0f;
+    public float IntelligentMultiple = 1.0f;
+    public float DefenceMultiple = 1.0f;
+    public float AntiMultiple =  1.0f;
+    //치명타 배수
+    public float Critical = 2f;
+    //임시 데미지 이펙트 시간
+    public float AnimationTime = 1f;
+
+    public int a;
+
+
+    //마나 체력 받기
+    BattleField battleField;
+    public float HP
+    {
+        get => hp;
+        set
+        {
+            if(hp != value)
+            {
+                hp = value;
+                if (hp > 0)
+                {
+                    Debug.Log($"남은체력 {HP}");
+                }
+                else
+                {
+                    hp = 0;
+                    Die();
+                }
+            }
+        }
+    }
+    public virtual float MP
+    {
+        get => mp;
+        set
+        {
+            if(mp != value)
+            {
+                mp = value;
+                Debug.Log($"현재 마나는 {mp}");
+            }
+        }
+    }
+
+    public virtual float Turn
+    {
+        get => speed;
+        set
+        {
+            if(IsDead == false)
+            {
+                if (speed != value)
+                {
+                    speed = value;
+                    if (speed > 100f)
+                    {
+                        speed -= 100f;
+                        attack = true;
+                    }
+                }
+            }
+           
+        }
+    }
+    protected virtual void Start()
+    {
+        
+    }
+
+    /// <summary>
+    /// 캐릭터 스탯
+    /// </summary>
+    protected virtual void Awake()
+    {
+        battleField = FindObjectOfType<BattleField>();
+        // enemy = find
+        //CharacterStats();
+        //Hit = transform.GetChild(0).gameObject;
+        //Hit.SetActive(false);
+        hp = MaxHp;
+        mp = MaxMp;
+    }
+
+  
+
+    /// <summary>
+    /// 주는 데미지
+    /// </summary>
+    /// <returns>주는 데미지 리턴</returns>
+    protected virtual void Attack(CharacterBase target, int attackType)
+    {
+        if (Random.Range(0, 100) < Agility)
+        {
+            Damage = (Strike * StrikeMultiple + Intelligent * IntelligentMultiple) * Critical;
+        }
+        else Damage = (Strike * StrikeMultiple + Intelligent * IntelligentMultiple);
+        Debug.Log($"기본공격으로 {Damage}만큼 {target}에게 피해를 줌");
+        target.GetDemage(Damage, 0);       // 적에게 데미지 줌
+    }
+
+    /// <summary>
+    /// 받는 데미지
+    /// </summary>
+    /// <param name="getDamage">데미지</param>s
+    /// <param name="DamageSort">받는 데미지 종류</param>
+    public void GetDemage(float getDamage, int DamageSort)
+    {
+        if(DamageSort == 0) HP -= getDamage / Defence;
+        else if(DamageSort == 1) HP -= getDamage / Anti;
+        //StartCoroutine(hit());
+    }
+
+    /// <summary>
+    /// 으앙주금
+    /// </summary>
+    protected virtual void Die()
+    {
+        IsDead = true;
+    }
+}
