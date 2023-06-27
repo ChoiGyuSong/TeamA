@@ -25,33 +25,17 @@ public class PlayerBase : CharacterBase
     public int costB = 30;
 
     public bool playerLose = false;
-    GameManager GM;
-
-
-    int enemy = 0;
 
     protected override void Awake()
     {
         base.Awake();
         inputAction = new PlayerInputAction();
     }
-    protected override void Start()
-    {
-    }
-
-    private void Update()
-    {
-        
-    }
-
 
     public void PlayerAttack()
     {
-<<<<<<< HEAD
         if (IsDead == false)
-=======
         if (attack)
->>>>>>> 95aa2cf19a6e7df33acc7b73e045be717cd2373c
         {
             mousePosition = Input.mousePosition;    // 마우스 포지션을 저장
             Vector2 pos = Camera.main.ScreenToWorldPoint(mousePosition);    // 마우스 클릭 위치를 카메라 위치에 맞게 변경
@@ -133,7 +117,7 @@ public class PlayerBase : CharacterBase
                 choiceAction = 0;   //초기화
                 Debug.Log($"1번 스킬로 {skill}만큼 {target}에게 피해를 주었다.");
                 target.GetDemage(skill, 0);
-                
+
                 break;
             case 2:
                 MP -= costB;
@@ -183,7 +167,7 @@ public class PlayerBase : CharacterBase
         }
     }
 
-    
+
     /// <summary>
     /// 마나 부족시 불러올 함수
     /// </summary>
@@ -209,7 +193,7 @@ public class PlayerBase : CharacterBase
         Debug.Log("2번 스킬 선택");
         choiceAction = 3;
     }
-    
+
     private void MouseClick(InputAction.CallbackContext value)
     {
         PlayerAttack();

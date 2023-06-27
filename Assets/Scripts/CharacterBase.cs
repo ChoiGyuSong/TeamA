@@ -25,7 +25,7 @@ public class CharacterBase : MonoBehaviour
     public float StrikeMultiple = 1.0f;
     public float IntelligentMultiple = 1.0f;
     public float DefenceMultiple = 1.0f;
-    public float AntiMultiple =  1.0f;
+    public float AntiMultiple = 1.0f;
     //치명타 배수
     public float Critical = 2f;
     //임시 데미지 이펙트 시간
@@ -35,13 +35,12 @@ public class CharacterBase : MonoBehaviour
 
 
     //마나 체력 받기
-    BattleField battleField;
     public float HP
     {
         get => hp;
         set
         {
-            if(hp != value)
+            if (hp != value)
             {
                 hp = value;
                 if (hp > 0)
@@ -61,7 +60,7 @@ public class CharacterBase : MonoBehaviour
         get => mp;
         set
         {
-            if(mp != value)
+            if (mp != value)
             {
                 mp = value;
                 Debug.Log($"현재 마나는 {mp}");
@@ -74,33 +73,24 @@ public class CharacterBase : MonoBehaviour
         get => speed;
         set
         {
-<<<<<<< HEAD
-            if(IsDead == false)
+            if (IsDead == false)
             {
                 if (speed != value)
                 {
                     speed = value;
                     if (speed > 100f)
-=======
-            if (!IsDead)
-            {
-                if(speed != value)
-                {
-                    speed = value;
-                    if(speed > 100f)
->>>>>>> 95aa2cf19a6e7df33acc7b73e045be717cd2373c
                     {
                         speed -= 100f;
                         attack = true;
                     }
                 }
             }
-           
+
         }
     }
     protected virtual void Start()
     {
-        
+
     }
 
     /// <summary>
@@ -108,7 +98,6 @@ public class CharacterBase : MonoBehaviour
     /// </summary>
     protected virtual void Awake()
     {
-        battleField = FindObjectOfType<BattleField>();
         // enemy = find
         //CharacterStats();
         //Hit = transform.GetChild(0).gameObject;
@@ -117,7 +106,7 @@ public class CharacterBase : MonoBehaviour
         mp = MaxMp;
     }
 
-  
+
 
     /// <summary>
     /// 주는 데미지
@@ -141,8 +130,8 @@ public class CharacterBase : MonoBehaviour
     /// <param name="DamageSort">받는 데미지 종류</param>
     public void GetDemage(float getDamage, int DamageSort)
     {
-        if(DamageSort == 0) HP -= getDamage / Defence;
-        else if(DamageSort == 1) HP -= getDamage / Anti;
+        if (DamageSort == 0) HP -= getDamage / Defence;
+        else if (DamageSort == 1) HP -= getDamage / Anti;
         //StartCoroutine(hit());
     }
 
@@ -152,9 +141,5 @@ public class CharacterBase : MonoBehaviour
     protected virtual void Die()
     {
         IsDead = true;
-<<<<<<< HEAD
-=======
-        Debug.Log($"{this.gameObject} Die");
->>>>>>> 95aa2cf19a6e7df33acc7b73e045be717cd2373c
     }
 }

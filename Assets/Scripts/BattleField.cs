@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using static UnityEditor.Experimental.GraphView.GraphView;
 
-public class BattleField : MonoBehaviour
+public class BattleField : GameManager
 {
     CharacterBase[] playerBase;
     CharacterBase[] enemyBase;
@@ -16,16 +16,5 @@ public class BattleField : MonoBehaviour
     {
         playerBase = FindObjectsOfType<PlayerBase>();
         enemyBase = FindObjectsOfType<EnemyBase>();
-    }
-
-    private void Start()
-    {
-    }
-
-    private void Update()
-    {
-        
-    }
-
-    
+    }    
 }
