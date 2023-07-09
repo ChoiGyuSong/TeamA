@@ -25,14 +25,18 @@ public class EnemyBase : CharacterBase
         gameManager = FindObjectOfType<GameManager>();
     }
 
-
-    private void Update()
+    /// <summary>
+    /// 턴을 잡았을때 실행하는 함수
+    /// </summary>
+    public void TakeTurn()
     {
+        EnemyAttack();  // 적을 공격
+        // 적의 턴이 끝나면 BattleField에 턴종료 신호 보냄
     }
 
     public virtual void EnemyAttack()
     {
-        if (attack == true && IsDead == false)
+        if (IsDead == false)
         {
             switch (Random.Range(0, 3))
             {
@@ -46,11 +50,18 @@ public class EnemyBase : CharacterBase
                     Attack(player3, damagetype);
                     break;
             }
-            attack = false;
         }
-        Turn += speed;
     }
 
+    public override void EnemyAction()
+    {
+        EnemyAttack();
+        base.EnemyAction();
+    }
+
+    public override void EndTurn()
+    {
+    }
     protected override void Die()
     {
         base.Die();

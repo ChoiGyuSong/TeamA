@@ -1,156 +1,105 @@
 using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
+using static UnityEditor.Experimental.GraphView.GraphView;
 using static UnityEditor.PlayerSettings;
 
 public class PlayerBase : CharacterBase
 {
-    PlayerInputAction inputAction;
-    int choiceAction = 0;
-
-    Vector3 mousePosition;      // 마우스 위치 
-
+    /// <summary>
+    /// 스킬 데미지
+    /// </summary>
     float skill = 0.0f;
 
-    public float ASkillCoefficient = 5.0f;
-    public float BSkillCoefficient = 1.5f;
+    /// <summary>
+    /// 턴매니저 불러옴
+    /// </summary>
+    TurnManager turnManager;
 
-    private CharacterBase targetObject;
-    GameObject clickObject = null;
+    public float ASkillCoefficient = 5.0f;  // 1번스킬(A스킬) 계수
+    public float BSkillCoefficient = 1.5f;  // 2번스킬(B스킬) 계수
 
-    public int costA = 20;
-    public int costB = 30;
+    public int costA = 20;  // 1번스킬 마나 소모량
+    public int costB = 30;  // 2번스킬 마나 소모량
 
-    public bool playerLose = false;
-    GameManager GM;
+    public int damagetype = 0;  // 데미지 소모량
 
-
-    int enemy = 0;
-
-    protected override void Awake()
+    public void Start()
     {
-        base.Awake();
-        inputAction = new PlayerInputAction();
+        turnManager = FindObjectOfType<TurnManager>();
     }
-    protected override void Start()
-    {
-    }
-
-    private void Update()
-    {
-
-    }
-
-
-    public void PlayerAttack()
-    {
-        if (IsDead == false)
-            if (attack)
-            {
-                mousePosition = Input.mousePosition;    // 마우스 포지션을 저장
-                Vector2 pos = Camera.main.ScreenToWorldPoint(mousePosition);    // 마우스 클릭 위치를 카메라 위치에 맞게 변경
-
-                RaycastHit2D hit = Physics2D.Raycast(pos, Vector2.zero);    // collider를 hit에 리턴
-                if (choiceAction != 0)      // 캐릭터 행동 선택이 0이 아닐시
-                {
-                    if (hit.collider != null)   // 콜라이더 선택이 null이 아닐시(클릭을 콜라이더에 했을때)
-                    {
-                        clickObject = hit.collider.gameObject;
-                        targetObject = clickObject.GetComponent<CharacterBase>();
-                        if (hit.collider.gameObject.name == "Enemy1")
-                        {
-                            ChoiceAction(targetObject, choiceAction);
-                        }
-                        else if (hit.collider.gameObject.name == "Enemy2")
-                        {
-                            ChoiceAction(targetObject, choiceAction);
-                        }
-                        else if (hit.collider.gameObject.name == "Enemy3")
-                        {
-                            ChoiceAction(targetObject, choiceAction);
-                        }
-                        else if (hit.collider.gameObject.name == "Boss")
-                        {
-                            ChoiceAction(targetObject, choiceAction);
-                        }
-                    }
-                }
-                attack = false;
-            }
-        Turn += speed;
-
-    }
-
-    private void OnEnable()     // inputAction 활성화
-    {
-        inputAction.Player.Enable();
-        inputAction.Player.B1.performed += B1;  // 기본공격 선택 활성화
-        inputAction.Player.B2.performed += B2;  // 스킬 선택 활성화
-        inputAction.Player.B3.performed += B3;  // 적 선택 활성화
-        inputAction.Player.Mouse.performed += MouseClick;
-    }
-
-
-
-    private void OnDisable()    // inputAction 비활성화
-    {
-        inputAction.Player.Mouse.performed -= MouseClick;
-        inputAction.Player.B1.performed -= B1;  // 적 선택 비활성화
-        inputAction.Player.B2.performed -= B2;  // 스킬 선택 비활성화
-        inputAction.Player.B3.performed -= B3;  // 기본공격 선택 비활성화
-        inputAction.Player.Disable();
-    }
-
-    protected override void Attack(CharacterBase target, int attackType)
+    
+    /// <summary>
+    /// TurnManager에서 마우스 클릭이 된후 실행되는 함수
+    /// </summary>
+    /// <param name="target"> 선택된 적 </param>
+    /// <param name="attackType"> 데미지 형식 </param>
+    public override void Attack(CharacterBase target, int attackType)
     {
         switch (attackType)
         {
             case 0:
-                if (target.IsDead == false)
+                if (target.IsDead == false)     // 타겟이 살아있다면
                 {
-                    base.Attack(target, 0);
-                    choiceAction = 0;   //초기화
+                    base.Attack(target, 0);     // 기본공격 실행
+                    turnManager.choiceAction = 0;  // 행동 초기화
                 }
-                else
+                else  // 적이 죽었다면
                 {
                     Debug.Log("해당적은 이미 죽었습니다");
                 }
                 break;
             case 1:
-                MP -= costA;
-                if (Random.Range(0, 100) < Agility)
+                if (target.IsDead == false)     // 타겟이 살아있다면
                 {
-                    skill = (Strike * (StrikeMultiple * ASkillCoefficient) + Intelligent * IntelligentMultiple) * Critical;
-                    choiceAction = 0;   //초기화
+                    MP -= costA;
+                    if (Random.Range(0, 100) < Agility)
+                    {
+                        skill = (Strike * (StrikeMultiple * ASkillCoefficient) + Intelligent * IntelligentMultiple) * Critical;
+                        turnManager.choiceAction = 0;   //초기화
+                    }
+                    else skill = (Strike * (StrikeMultiple * ASkillCoefficient) + Intelligent * IntelligentMultiple);
+                    turnManager.choiceAction = 0;   //초기화
+                    Debug.Log($"1번 스킬로 {skill}만큼 {target}에게 피해를 주었다.");
+                    target.GetDemage(skill, 0);
                 }
-                else skill = (Strike * (StrikeMultiple * ASkillCoefficient) + Intelligent * IntelligentMultiple);
-                choiceAction = 0;   //초기화
-                Debug.Log($"1번 스킬로 {skill}만큼 {target}에게 피해를 주었다.");
-                target.GetDemage(skill, 0);
+                else  // 적이 죽었다면
+                {
+                    Debug.Log("해당적은 이미 죽었습니다");
+                }
 
                 break;
             case 2:
-                MP -= costB;
-                if (Random.Range(0, 100) < Agility)
+                if (target.IsDead == false)     // 타겟이 살아있다면
                 {
-                    skill = (Strike * (StrikeMultiple * BSkillCoefficient) + Intelligent * IntelligentMultiple) * Critical;
+                    MP -= costB;
+                    if (Random.Range(0, 100) < Agility)
+                    {
+                        skill = (Strike * (StrikeMultiple * BSkillCoefficient) + Intelligent * IntelligentMultiple) * Critical;
+                    }
+                    else skill = (Strike * (StrikeMultiple * BSkillCoefficient) + Intelligent * IntelligentMultiple);
+                    Debug.Log($"2번 스킬로 {skill}만큼 {target}에게 피해를 주었다.");
+                    target.GetDemage(skill, 0);
                 }
-                else skill = (Strike * (StrikeMultiple * BSkillCoefficient) + Intelligent * IntelligentMultiple);
-                Debug.Log($"2번 스킬로 {skill}만큼 {target}에게 피해를 주었다.");
-                target.GetDemage(skill, 0);
+                else  // 적이 죽었다면
+                {
+                    Debug.Log("해당적은 이미 죽었습니다");
+                }
                 break;
         }
     }
+    
 
     /// <summary>
     /// 캐릭터 선택 이후
     /// </summary>
     /// <param name="targetObject">공격 대상</param>
     /// <param name="choiceAction">평타,스킬 선택</param>
-    void ChoiceAction(CharacterBase targetObject, int choiceAction)
+    public void ChoiceAction(CharacterBase targetObject, int choiceAction)
     {
         if (choiceAction == 1)  // 행동이 1번이면
         {
@@ -189,32 +138,12 @@ public class PlayerBase : CharacterBase
         Debug.Log("MP가 부족합니다 행동을 재선택하세요");
     }
 
-    private void B1(InputAction.CallbackContext value)     // 일반공격 선택시(키보드 1)
+    public override void PlayerAction()
     {
-        Debug.Log("기본공격 선택");
-        choiceAction = 1;
+        base.PlayerAction();
     }
-
-    private void B2(InputAction.CallbackContext value)     // 스킬공격 선택시(키보드 2)
-    {
-        Debug.Log("1번 스킬 선택");
-        choiceAction = 2;
-    }
-
-    private void B3(InputAction.CallbackContext value)     // 스킬공격 선택시(키보드 3)
-    {
-        Debug.Log("2번 스킬 선택");
-        choiceAction = 3;
-    }
-
-    private void MouseClick(InputAction.CallbackContext value)
-    {
-        PlayerAttack();
-    }
-
     protected override void Die()
     {
         base.Die();
-        // GM.PlayerDied();
     }
 }

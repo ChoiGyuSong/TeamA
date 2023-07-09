@@ -24,15 +24,6 @@
                     "initialStateCheck": true
                 },
                 {
-                    "name": "ChoiceEnemy",
-                    "type": "Value",
-                    "id": "662e60d1-3f5f-4650-8efc-899b47331139",
-                    "expectedControlType": "Integer",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": true
-                },
-                {
                     "name": "B1",
                     "type": "Button",
                     "id": "cae78edb-aab0-4ae4-8bbe-8b840269950f",
@@ -89,39 +80,6 @@
                     "processors": "",
                     "groups": "",
                     "action": "Skill",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "af8e2c68-cc76-406d-9195-a2a31d1d1456",
-                    "path": "1",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "Player",
-                    "action": "ChoiceEnemy",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "7165ff5b-56f3-4c03-9821-0dfbb19183d8",
-                    "path": "2",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "Player",
-                    "action": "ChoiceEnemy",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "29340f46-8f61-4ada-938a-1dd3daff8fa9",
-                    "path": "3",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "Player",
-                    "action": "ChoiceEnemy",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },

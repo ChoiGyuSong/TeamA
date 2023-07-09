@@ -5,7 +5,6 @@ using UnityEngine;
 
 public class CharacterBase : MonoBehaviour
 {
-    public bool attack = false;
     public bool IsDead = false;
     //최종 데미지
     float Damage;
@@ -30,6 +29,11 @@ public class CharacterBase : MonoBehaviour
     public float Critical = 2f;
     //임시 데미지 이펙트 시간
     public float AnimationTime = 1f;
+
+    public float turnSpeed; // 턴 속도
+    public bool isTurnComplete ; // 턴 완료 여부
+    public bool isAlive = true; // 생존 여부
+
 
     public int a;
     public float HP
@@ -65,31 +69,6 @@ public class CharacterBase : MonoBehaviour
         }
     }
 
-    public virtual float Turn
-    {
-        get => speed;
-        set
-        {
-            if (IsDead == false)
-            {
-                if (speed != value)
-                {
-                    speed = value;
-                    if (speed > 100f)
-                    {
-                        speed -= 100f;
-                        attack = true;
-                    }
-                }
-            }
-
-        }
-    }
-    protected virtual void Start()
-    {
-
-    }
-
     /// <summary>
     /// 캐릭터 스탯
     /// </summary>
@@ -103,13 +82,11 @@ public class CharacterBase : MonoBehaviour
         mp = MaxMp;
     }
 
-
-
     /// <summary>
     /// 주는 데미지
     /// </summary>
     /// <returns>주는 데미지 리턴</returns>
-    protected virtual void Attack(CharacterBase target, int attackType)
+    public virtual void Attack(CharacterBase target, int attackType)
     {
         if (Random.Range(0, 100) < Agility)
         {
@@ -138,5 +115,29 @@ public class CharacterBase : MonoBehaviour
     protected virtual void Die()
     {
         IsDead = true;
+        isAlive = false;
     }
+
+    public void StartTurn()
+    {
+
+        // 턴 완료를 초기화
+        isTurnComplete = false;
+    }
+
+    public virtual void PlayerAction()
+    {
+        // PlayerBase에서 플레이어가 행동
+    }
+
+    public virtual void EnemyAction()
+    {
+        // EnemyBase에서 적이 행동
+    }
+
+    public virtual void EndTurn()
+    {
+        isTurnComplete = true;
+    }
+
 }
