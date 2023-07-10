@@ -2,19 +2,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Enemy1 : PlayerBase
+public class Enemy1 : EnemyBase
 {
-<<<<<<< Updated upstream
-}
-=======
-    protected override void  Awake()
+    public override void EnemyAttack()
     {
-        damagetype = 1;
-        Strike = 1f;
-        Intelligent = 1f;
-        Agility = 1f;
-        Defence = 1f;
-        Anti = 1f;
+        base.EnemyAttack();
     }
 }
->>>>>>> Stashed changes

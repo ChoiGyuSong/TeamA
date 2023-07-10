@@ -1,13 +1,11 @@
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 
 public class CharacterBase : MonoBehaviour
 {
-    //데미지 애니매이션
-    GameObject Hit;
-    //적 생성
-    GameObject enemy;
+    public bool IsDead = false;
     //최종 데미지
     float Damage;
     //기본 스탯
@@ -18,28 +16,39 @@ public class CharacterBase : MonoBehaviour
     public float Anti = 1f;
     float hp;
     float mp;
+    public float speed = 60f;
     //최대 마나체력
     public float MaxHp = 100f;
     public float MaxMp = 100f;
     //스탯 배수 설정
-    public float StrikeMultiple = 1f;
-    public float IntelligentMultiple = 1f;
-    public float DefenceMultiple = 1f;
-    public float AntiMultiple = 1f;
+    public float StrikeMultiple = 1.0f;
+    public float IntelligentMultiple = 1.0f;
+    public float DefenceMultiple = 1.0f;
+    public float AntiMultiple = 1.0f;
     //치명타 배수
     public float Critical = 2f;
     //임시 데미지 이펙트 시간
     public float AnimationTime = 1f;
-    //마나 체력 받기
+
+    public float turnSpeed; // 턴 속도
+    public bool isTurnComplete ; // 턴 완료 여부
+    public bool isAlive = true; // 생존 여부
+
+
+    public int a;
     public float HP
     {
-        get => MaxHp;
-        protected set
+        get => hp;
+        set
         {
-            if(hp != value)
+            if (hp != value)
             {
                 hp = value;
-                if(hp < 0)
+                if (hp > 0)
+                {
+                    Debug.Log($"남은체력 {HP}");
+                }
+                else
                 {
                     hp = 0;
                     Die();
@@ -47,20 +56,19 @@ public class CharacterBase : MonoBehaviour
             }
         }
     }
-    public float MP
+    public virtual float MP
     {
-        get => MaxMp;
-        protected set
+        get => mp;
+        set
         {
-            if(mp != value)
+            if (mp != value)
             {
                 mp = value;
+                Debug.Log($"현재 마나는 {mp}");
             }
         }
     }
-    //적 이름 받기
-    public string enemyName;
-    
+
     /// <summary>
     /// 캐릭터 스탯
     /// </summary>
@@ -68,47 +76,37 @@ public class CharacterBase : MonoBehaviour
     {
         // enemy = find
         //CharacterStats();
-        Hit = transform.GetChild(0).gameObject;
-        Hit.SetActive(false);
+        //Hit = transform.GetChild(0).gameObject;
+        //Hit.SetActive(false);
+        hp = MaxHp;
+        mp = MaxMp;
     }
 
-    /// <summary>
-    /// 캐릭터 스탯
-    /// </summary>
-    /*protected virtual void CharacterStats()
-    {
-        Strike = 1f;
-        Intelligent = 50f;
-        Agility = 1f;
-        Defence = 1f * DefenceMultiple;
-        Anti = 1f * AntiMultiple;
-    }*/
-    
     /// <summary>
     /// 주는 데미지
     /// </summary>
     /// <returns>주는 데미지 리턴</returns>
-    protected virtual void Attack()
+    public virtual void Attack(CharacterBase target, int attackType)
     {
         if (Random.Range(0, 100) < Agility)
         {
             Damage = (Strike * StrikeMultiple + Intelligent * IntelligentMultiple) * Critical;
         }
         else Damage = (Strike * StrikeMultiple + Intelligent * IntelligentMultiple);
-        //적.getDamage(Damage,0);       // 적에게 데미지 줄때
+        Debug.Log($"기본공격으로 {Damage}만큼 {target}에게 피해를 줌");
+        target.GetDemage(Damage, 0);       // 적에게 데미지 줌
     }
 
     /// <summary>
     /// 받는 데미지
     /// </summary>
-    /// <param name="getDamage">데미지</param>
+    /// <param name="getDamage">데미지</param>s
     /// <param name="DamageSort">받는 데미지 종류</param>
-    public void getDemage(float getDamage, int DamageSort)
+    public void GetDemage(float getDamage, int DamageSort)
     {
-        if(DamageSort == 0) HP -= getDamage / Defence;
-        else if(DamageSort == 1) HP -= getDamage / Anti;
-        Debug.Log(HP);
-        StartCoroutine(hit());
+        if (DamageSort == 0) HP -= getDamage / Defence;
+        else if (DamageSort == 1) HP -= getDamage / Anti;
+        //StartCoroutine(hit());
     }
 
     /// <summary>
@@ -116,17 +114,30 @@ public class CharacterBase : MonoBehaviour
     /// </summary>
     protected virtual void Die()
     {
-        Debug.Log("Die");
+        IsDead = true;
+        isAlive = false;
     }
 
-    /// <summary>
-    /// 데이지 애니메이션 실행
-    /// </summary>
-    /// <returns>AnimationTime시간 만큼 실행</returns>
-    IEnumerator hit()
+    public void StartTurn()
     {
-        Hit.SetActive(true);
-        yield return AnimationTime;
-        Hit.SetActive(false);
+
+        // 턴 완료를 초기화
+        isTurnComplete = false;
     }
+
+    public virtual void PlayerAction()
+    {
+        // PlayerBase에서 플레이어가 행동
+    }
+
+    public virtual void EnemyAction()
+    {
+        // EnemyBase에서 적이 행동
+    }
+
+    public virtual void EndTurn()
+    {
+        isTurnComplete = true;
+    }
+
 }

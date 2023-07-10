@@ -1,18 +1,20 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
 public class EnemyBase : CharacterBase
 {
-<<<<<<< Updated upstream
-=======
-    PlayerInputAction inputActions;
-
     Player1 player1;
     Player2 player2;
     Player3 player3;
-    protected int damagetype = 0;
+    GameManager gameManager;
+    public int damagetype = 0;
+    public int DeadCount = 0;
+    public int enemyDie = 0;
+    public bool enemyLose = false;
+
 
     protected override void Awake()
     {
@@ -20,47 +22,50 @@ public class EnemyBase : CharacterBase
         player1 = FindObjectOfType<Player1>();
         player2 = FindObjectOfType<Player2>();
         player3 = FindObjectOfType<Player3>();
-        inputActions = new PlayerInputAction();
-    }
-    private void OnEnable()
-    {
-        inputActions.Player.Enable();
-        inputActions.Player.B1.performed += test1;
+        gameManager = FindObjectOfType<GameManager>();
     }
 
-    private void OnDisable()
+    /// <summary>
+    /// 턴을 잡았을때 실행하는 함수
+    /// </summary>
+    public void TakeTurn()
     {
-        inputActions.Player.Disable();
-        inputActions.Player.B1.performed -= test1;
+        EnemyAttack();  // 적을 공격
+        // 적의 턴이 끝나면 BattleField에 턴종료 신호 보냄
     }
 
-    private void test1(InputAction.CallbackContext context)
+    public virtual void EnemyAttack()
     {
-        OnAttack();
-    }
-
-    protected virtual void OnAttack()
-    {
-        switch(Random.Range(0, 3))
+        if (IsDead == false)
         {
-<<<<<<< Updated upstream
-            case 0:Attack(player1, 0);
-                break;
-            case 1:Attack(player2, 0);
-                break;
-            case 2:Attack(player3, 0);
-=======
-            case 0:
-                Attack(player1, damagetype);
-                break;
-            case 1:
-                Attack(player2, damagetype);
-                break;
-            case 2:
-                Attack(player3, damagetype);
->>>>>>> Stashed changes
-                break;
+            switch (Random.Range(0, 3))
+            {
+                case 0:
+                    Attack(player1, damagetype);
+                    break;
+                case 1:
+                    Attack(player2, damagetype);
+                    break;
+                case 2:
+                    Attack(player3, damagetype);
+                    break;
+            }
         }
     }
->>>>>>> Stashed changes
+
+    public override void EnemyAction()
+    {
+        EnemyAttack();
+        base.EnemyAction();
+    }
+
+    public override void EndTurn()
+    {
+    }
+    protected override void Die()
+    {
+        base.Die();
+        Debug.Log("적이 사망하였습니다.");
+        gameManager.EnemyDied();
+    }
 }

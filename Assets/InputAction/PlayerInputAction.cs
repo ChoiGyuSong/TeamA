@@ -46,15 +46,6 @@ public partial class @PlayerInputAction: IInputActionCollection2, IDisposable
                     ""initialStateCheck"": true
                 },
                 {
-                    ""name"": ""ChoiceEnemy"",
-                    ""type"": ""Value"",
-                    ""id"": ""662e60d1-3f5f-4650-8efc-899b47331139"",
-                    ""expectedControlType"": ""Integer"",
-                    ""processors"": """",
-                    ""interactions"": """",
-                    ""initialStateCheck"": true
-                },
-                {
                     ""name"": ""B1"",
                     ""type"": ""Button"",
                     ""id"": ""cae78edb-aab0-4ae4-8bbe-8b840269950f"",
@@ -76,6 +67,15 @@ public partial class @PlayerInputAction: IInputActionCollection2, IDisposable
                     ""name"": ""B3"",
                     ""type"": ""Button"",
                     ""id"": ""9906ff01-4995-4d42-aa1a-2bfddf6a8030"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Mouse"",
+                    ""type"": ""Button"",
+                    ""id"": ""3f87480d-00d5-4717-9317-90396fedca9a"",
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": """",
@@ -102,39 +102,6 @@ public partial class @PlayerInputAction: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""groups"": """",
                     ""action"": ""Skill"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""af8e2c68-cc76-406d-9195-a2a31d1d1456"",
-                    ""path"": ""1"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": ""Player"",
-                    ""action"": ""ChoiceEnemy"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""7165ff5b-56f3-4c03-9821-0dfbb19183d8"",
-                    ""path"": ""2"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": ""Player"",
-                    ""action"": ""ChoiceEnemy"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""29340f46-8f61-4ada-938a-1dd3daff8fa9"",
-                    ""path"": ""3"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": ""Player"",
-                    ""action"": ""ChoiceEnemy"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -170,6 +137,17 @@ public partial class @PlayerInputAction: IInputActionCollection2, IDisposable
                     ""action"": ""B3"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""573510e2-abdf-4d39-b2e6-a1056ea9edfd"",
+                    ""path"": ""<Mouse>/leftButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Mouse"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -197,10 +175,10 @@ public partial class @PlayerInputAction: IInputActionCollection2, IDisposable
         m_Player = asset.FindActionMap("Player", throwIfNotFound: true);
         m_Player_Attack = m_Player.FindAction("Attack", throwIfNotFound: true);
         m_Player_Skill = m_Player.FindAction("Skill", throwIfNotFound: true);
-        m_Player_ChoiceEnemy = m_Player.FindAction("ChoiceEnemy", throwIfNotFound: true);
         m_Player_B1 = m_Player.FindAction("B1", throwIfNotFound: true);
         m_Player_B2 = m_Player.FindAction("B2", throwIfNotFound: true);
         m_Player_B3 = m_Player.FindAction("B3", throwIfNotFound: true);
+        m_Player_Mouse = m_Player.FindAction("Mouse", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -264,20 +242,20 @@ public partial class @PlayerInputAction: IInputActionCollection2, IDisposable
     private List<IPlayerActions> m_PlayerActionsCallbackInterfaces = new List<IPlayerActions>();
     private readonly InputAction m_Player_Attack;
     private readonly InputAction m_Player_Skill;
-    private readonly InputAction m_Player_ChoiceEnemy;
     private readonly InputAction m_Player_B1;
     private readonly InputAction m_Player_B2;
     private readonly InputAction m_Player_B3;
+    private readonly InputAction m_Player_Mouse;
     public struct PlayerActions
     {
         private @PlayerInputAction m_Wrapper;
         public PlayerActions(@PlayerInputAction wrapper) { m_Wrapper = wrapper; }
         public InputAction @Attack => m_Wrapper.m_Player_Attack;
         public InputAction @Skill => m_Wrapper.m_Player_Skill;
-        public InputAction @ChoiceEnemy => m_Wrapper.m_Player_ChoiceEnemy;
         public InputAction @B1 => m_Wrapper.m_Player_B1;
         public InputAction @B2 => m_Wrapper.m_Player_B2;
         public InputAction @B3 => m_Wrapper.m_Player_B3;
+        public InputAction @Mouse => m_Wrapper.m_Player_Mouse;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -293,9 +271,6 @@ public partial class @PlayerInputAction: IInputActionCollection2, IDisposable
             @Skill.started += instance.OnSkill;
             @Skill.performed += instance.OnSkill;
             @Skill.canceled += instance.OnSkill;
-            @ChoiceEnemy.started += instance.OnChoiceEnemy;
-            @ChoiceEnemy.performed += instance.OnChoiceEnemy;
-            @ChoiceEnemy.canceled += instance.OnChoiceEnemy;
             @B1.started += instance.OnB1;
             @B1.performed += instance.OnB1;
             @B1.canceled += instance.OnB1;
@@ -305,6 +280,9 @@ public partial class @PlayerInputAction: IInputActionCollection2, IDisposable
             @B3.started += instance.OnB3;
             @B3.performed += instance.OnB3;
             @B3.canceled += instance.OnB3;
+            @Mouse.started += instance.OnMouse;
+            @Mouse.performed += instance.OnMouse;
+            @Mouse.canceled += instance.OnMouse;
         }
 
         private void UnregisterCallbacks(IPlayerActions instance)
@@ -315,9 +293,6 @@ public partial class @PlayerInputAction: IInputActionCollection2, IDisposable
             @Skill.started -= instance.OnSkill;
             @Skill.performed -= instance.OnSkill;
             @Skill.canceled -= instance.OnSkill;
-            @ChoiceEnemy.started -= instance.OnChoiceEnemy;
-            @ChoiceEnemy.performed -= instance.OnChoiceEnemy;
-            @ChoiceEnemy.canceled -= instance.OnChoiceEnemy;
             @B1.started -= instance.OnB1;
             @B1.performed -= instance.OnB1;
             @B1.canceled -= instance.OnB1;
@@ -327,6 +302,9 @@ public partial class @PlayerInputAction: IInputActionCollection2, IDisposable
             @B3.started -= instance.OnB3;
             @B3.performed -= instance.OnB3;
             @B3.canceled -= instance.OnB3;
+            @Mouse.started -= instance.OnMouse;
+            @Mouse.performed -= instance.OnMouse;
+            @Mouse.canceled -= instance.OnMouse;
         }
 
         public void RemoveCallbacks(IPlayerActions instance)
@@ -357,9 +335,9 @@ public partial class @PlayerInputAction: IInputActionCollection2, IDisposable
     {
         void OnAttack(InputAction.CallbackContext context);
         void OnSkill(InputAction.CallbackContext context);
-        void OnChoiceEnemy(InputAction.CallbackContext context);
         void OnB1(InputAction.CallbackContext context);
         void OnB2(InputAction.CallbackContext context);
         void OnB3(InputAction.CallbackContext context);
+        void OnMouse(InputAction.CallbackContext context);
     }
 }

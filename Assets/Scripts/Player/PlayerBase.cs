@@ -1,144 +1,149 @@
 using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
+using UnityEditor;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
+using static UnityEditor.Experimental.GraphView.GraphView;
+using static UnityEditor.PlayerSettings;
 
 public class PlayerBase : CharacterBase
 {
-    Enemy1 enemy1;
-    Enemy2 enemy2;
-    Enemy3 enemy3;
-    GameObject enemy;
-    PlayerInputAction inputAction;
-
-<<<<<<< Updated upstream
-    private void Awake()
-=======
-    Vector3 mousePosition;      // 마우스 위치 
-
+    /// <summary>
+    /// 스킬 데미지
+    /// </summary>
     float skill = 0.0f;
 
-    public float ASkillCoefficient = 5.0f;
-    public float BSkillCoefficient = 1.5f;
+    /// <summary>
+    /// 턴매니저 불러옴
+    /// </summary>
+    TurnManager turnManager;
 
-    private CharacterBase targetObject;
-    GameObject clickObject = null;
+    public float ASkillCoefficient = 5.0f;  // 1번스킬(A스킬) 계수
+    public float BSkillCoefficient = 1.5f;  // 2번스킬(B스킬) 계수
 
-    public int costA = 20;
-    public int costB = 30;
-    bool onActive = true;
+    public int costA = 20;  // 1번스킬 마나 소모량
+    public int costB = 30;  // 2번스킬 마나 소모량
 
-    protected override void Awake()
->>>>>>> Stashed changes
+    public int damagetype = 0;  // 데미지 소모량
+
+    public void Start()
     {
-        enemy1 = FindObjectOfType<Enemy1>();
-        enemy2 = FindObjectOfType<Enemy2>();
-        enemy3 = FindObjectOfType<Enemy3>();
-        inputAction = new PlayerInputAction();
-        onActive = false;
+        turnManager = FindObjectOfType<TurnManager>();
     }
-
-    private void Start()
+    
+    /// <summary>
+    /// TurnManager에서 마우스 클릭이 된후 실행되는 함수
+    /// </summary>
+    /// <param name="target"> 선택된 적 </param>
+    /// <param name="attackType"> 데미지 형식 </param>
+    public override void Attack(CharacterBase target, int attackType)
     {
-<<<<<<< Updated upstream
-
-=======
-        StartCoroutine(StartAttack());
-    }
-    public void Update()
-    {
-        
-    }
-
-    IEnumerator StartAttack()
-    {
-        onActive = true;
-        if (Input.GetMouseButtonDown(0))    // 마우스 클릭되었을때
+        switch (attackType)
         {
-            mousePosition = Input.mousePosition;    // 마우스 포지션을 저장
-            Vector2 pos = Camera.main.ScreenToWorldPoint(mousePosition);    // 마우스 클릭 위치를 카메라 위치에 맞게 변경
-
-            RaycastHit2D hit = Physics2D.Raycast(pos, Vector2.zero);    // collider를 hit에 리턴
-            if (choiceAction != 0)      // 캐릭터 행동 선택이 0이 아닐시
-            {
-                if (hit.collider != null)   // 콜라이더 선택이 null이 아닐시(클릭을 콜라이더에 했을때)
+            case 0:
+                if (target.IsDead == false)     // 타겟이 살아있다면
                 {
-                    clickObject = hit.collider.gameObject;
-                    targetObject = clickObject.GetComponent<CharacterBase>();
-                    if (hit.collider.gameObject.name == "Enemy1")
-                    {
-                        ChoiceAction(targetObject, choiceAction);
-                    }
-                    else if (hit.collider.gameObject.name == "Enemy2")
-                    {
-                        ChoiceAction(targetObject, choiceAction);
-                    }
-                    else if (hit.collider.gameObject.name == "Enemy3")
-                    {
-                        ChoiceAction(targetObject, choiceAction);
-                    }
-                    choiceAction = 0;   //초기화
+                    base.Attack(target, 0);     // 기본공격 실행
+                    turnManager.choiceAction = 0;  // 행동 초기화
                 }
+                else  // 적이 죽었다면
+                {
+                    Debug.Log("해당적은 이미 죽었습니다");
+                }
+                break;
+            case 1:
+                if (target.IsDead == false)     // 타겟이 살아있다면
+                {
+                    MP -= costA;
+                    if (Random.Range(0, 100) < Agility)
+                    {
+                        skill = (Strike * (StrikeMultiple * ASkillCoefficient) + Intelligent * IntelligentMultiple) * Critical;
+                        turnManager.choiceAction = 0;   //초기화
+                    }
+                    else skill = (Strike * (StrikeMultiple * ASkillCoefficient) + Intelligent * IntelligentMultiple);
+                    turnManager.choiceAction = 0;   //초기화
+                    Debug.Log($"1번 스킬로 {skill}만큼 {target}에게 피해를 주었다.");
+                    target.GetDemage(skill, 0);
+                }
+                else  // 적이 죽었다면
+                {
+                    Debug.Log("해당적은 이미 죽었습니다");
+                }
+
+                break;
+            case 2:
+                if (target.IsDead == false)     // 타겟이 살아있다면
+                {
+                    MP -= costB;
+                    if (Random.Range(0, 100) < Agility)
+                    {
+                        skill = (Strike * (StrikeMultiple * BSkillCoefficient) + Intelligent * IntelligentMultiple) * Critical;
+                    }
+                    else skill = (Strike * (StrikeMultiple * BSkillCoefficient) + Intelligent * IntelligentMultiple);
+                    Debug.Log($"2번 스킬로 {skill}만큼 {target}에게 피해를 주었다.");
+                    target.GetDemage(skill, 0);
+                }
+                else  // 적이 죽었다면
+                {
+                    Debug.Log("해당적은 이미 죽었습니다");
+                }
+                break;
+        }
+    }
+    
+
+    /// <summary>
+    /// 캐릭터 선택 이후
+    /// </summary>
+    /// <param name="targetObject">공격 대상</param>
+    /// <param name="choiceAction">평타,스킬 선택</param>
+    public void ChoiceAction(CharacterBase targetObject, int choiceAction)
+    {
+        if (choiceAction == 1)  // 행동이 1번이면
+        {
+            Attack(targetObject, 0);
+        }
+        else if (choiceAction == 2) // 행동이 2번이면
+        {
+            if (MP >= costA)
+            {
+                Attack(targetObject, 1);
+            }
+            else
+            {
+                LackMP();
             }
         }
-        onActive = false;
-        yield return null;
->>>>>>> Stashed changes
-    }
-    private void OnEnable()     // inputAction 활성화
-    {
-<<<<<<< Updated upstream
-        inputAction.Player.Enable();
-        inputAction.Player.B1.performed += B1;    // 기본공격 선택 활성화
-        inputAction.Player.B2.performed += B2;      // 스킬 선택 활성화
-        inputAction.Player.B3.performed += B3;  // 적 선택 활성화
-=======
-        if(onActive)
+        else if (choiceAction == 3) // 행동이 3번이면
         {
-            inputAction.Player.Enable();
-            inputAction.Player.B1.performed += B1;  // 기본공격 선택 활성화
-            inputAction.Player.B2.performed += B2;  // 스킬 선택 활성화
-            inputAction.Player.B3.performed += B3;  // 적 선택 활성화
+            if (MP >= costB)
+            {
+                Attack(targetObject, 2);
+            }
+            else
+            {
+                LackMP();
+            }
         }
->>>>>>> Stashed changes
     }
 
 
-
-    private void OnDisable()    // inputAction 비활성화
+    /// <summary>
+    /// 마나 부족시 불러올 함수
+    /// </summary>
+    void LackMP()
     {
-<<<<<<< Updated upstream
-        inputAction.Player.B1.performed -= B1;  // 적 선택 비활성화
-        inputAction.Player.B2.performed -= B2;              // 스킬 선택 비활성화
-        inputAction.Player.B3.performed -= B3;         // 기본공격 선택 비활성화
-        inputAction.Player.Disable();
-=======
-        if(onActive)
-        {
-            inputAction.Player.B1.performed -= B1;  // 적 선택 비활성화
-            inputAction.Player.B2.performed -= B2;  // 스킬 선택 비활성화
-            inputAction.Player.B3.performed -= B3;  // 기본공격 선택 비활성화
-            inputAction.Player.Disable();
-        }
->>>>>>> Stashed changes
+        Debug.Log("MP가 부족합니다 행동을 재선택하세요");
     }
 
-    private void B1(InputAction.CallbackContext value)    // 일반공격 선택시(키보드 1)
+    public override void PlayerAction()
     {
-        Debug.Log(1);
-        enemy1.getDemage(5, 0);
+        base.PlayerAction();
     }
-
-    private void B2(InputAction.CallbackContext value)     // 스킬공격 선택시(키보드 2)
+    protected override void Die()
     {
-        Debug.Log(2);
-        enemy2.getDemage(5, 0);
-    }
-
-    private void B3(InputAction.CallbackContext value)
-    {
-        Debug.Log(3);
-        enemy3.getDemage(5, 0);
+        base.Die();
     }
 }
