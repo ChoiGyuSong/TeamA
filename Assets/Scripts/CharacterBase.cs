@@ -114,8 +114,14 @@ public class CharacterBase : MonoBehaviour
     /// </summary>
     protected virtual void Die()
     {
+        Collider collider = GetComponent<Collider>();
         IsDead = true;
         isAlive = false;
+
+        if (collider != null)
+        {
+            collider.enabled = false;
+        }
     }
 
     public void StartTurn()
