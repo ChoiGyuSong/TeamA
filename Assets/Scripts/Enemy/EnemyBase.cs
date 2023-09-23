@@ -9,7 +9,7 @@ public class EnemyBase : CharacterBase
     Player1 player1;
     Player2 player2;
     Player3 player3;
-    GameManager gameManager;
+    TurnManager turnManager;
     public int damagetype = 0;
     public int DeadCount = 0;
     public int enemyDie = 0;
@@ -22,7 +22,6 @@ public class EnemyBase : CharacterBase
         player1 = FindObjectOfType<Player1>();
         player2 = FindObjectOfType<Player2>();
         player3 = FindObjectOfType<Player3>();
-        gameManager = FindObjectOfType<GameManager>();
     }
 
     /// <summary>
@@ -66,6 +65,6 @@ public class EnemyBase : CharacterBase
     {
         base.Die();
         Debug.Log("적이 사망하였습니다.");
-        gameManager.EnemyDied();
+        turnManager.EnemyDied();
     }
 }

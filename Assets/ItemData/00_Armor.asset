@@ -1,0 +1,38 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e7cca93ce5bcf2f48a7d4bff4feb7ce6, type: 3}
+  m_Name: 00_Armor
+  m_EditorClassIdentifier: 
+  code: 0
+  itemName: "\uC0C1\uC758"
+  itemIcon: {fileID: 21300000, guid: d83df7fb499d35f4c848382456ae42b7, type: 3}
+  maxStackCount: 1
+  upgrade: 0
+  beforeStr: 0
+  beforeAgi: 0
+  beforeInt: 0
+  beforeHP: 0
+  beforeMP: 0
+  beforeValue: 0
+  afterStr: 0
+  afterAgi: 0
+  afterInt: 0
+  afterHP: 0
+  afterMP: 0
+  afterValue: 0
+  risingStr: 0
+  risingAgi: 0
+  risingInt: 0
+  risingHP: 0
+  risingMP: 0
+  price: 0
+  cost: 0

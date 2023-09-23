@@ -33,16 +33,28 @@ public class TurnManager : MonoBehaviour
 
     Queue<CharacterBase> turnQueue; // 턴 순서를 저장하는 큐
     public CharacterBase currentCharacter; // 현재 턴을 가진 캐릭터
+    GameManager gameManager;        // 게임매니저
 
     GameObject clickObject = null;   // 마우스가 클릭한 게임오브젝트
     CharacterBase targetObject;      // 오브젝트 찾아놓기
     Vector3 mousePosition;           // 마우스 위치 
+
+    /// <summary>
+    /// 플레이어 데스카운트(죽을때마다 씩증가)
+    /// </summary>
+    private int PdeathCount = 0;
+
+    /// <summary>
+    /// 적 데스카운트(죽을때마다 증가)
+    /// </summary>
+    private int EdeathCount = 0;
 
     private void Start()
     {
         playerBase = FindObjectsOfType<PlayerBase>();
         enemyBase = FindObjectsOfType<EnemyBase>();
         PB = FindObjectOfType<PlayerBase>();
+        gameManager = FindObjectOfType<GameManager>();
 
         turnQueue = new Queue<CharacterBase>(); // 큐 초기화
         int maxCount = playerBase.Length + enemyBase.Length;    // 플레이어 오브젝트 갯수 + 적 오브젝트 갯수
@@ -76,7 +88,6 @@ public class TurnManager : MonoBehaviour
         if (currentCharacter != null && currentCharacter.isTurnComplete)
         {
             StartTurn();    // 다음턴 실행
-            Debug.Log("다음 턴 실행.");
         }
     }
 
@@ -225,6 +236,25 @@ public class TurnManager : MonoBehaviour
         else
         {
             Debug.Log("행동이 선택되지 않았습니다");
+        }
+    }
+
+    public void PlayerDied()
+    {
+        PdeathCount++;  // 플레이어 데스 카운트 1씩 증가
+        if (PdeathCount >= playerBase.Length)   // 플레이어의 데스카운트가 플레이어 오브젝트 갯수보다 크거나 같아지면
+        {
+            gameManager.BattleResultLoss();
+        }
+    }
+
+    public void EnemyDied()
+    {
+        EdeathCount++;  // 적 데스 카운트 1씩증가
+
+        if (EdeathCount >= enemyBase.Length)    // 적의 데스카운트가 적 오브젝트 갯수보다 크거나 같아지면
+        {
+            gameManager.BattleResultVictory();
         }
     }
 }

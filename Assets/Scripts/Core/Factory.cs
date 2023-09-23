@@ -5,36 +5,27 @@ using UnityEngine;
 
 public enum PoolObjectType
 {
-    Player1 =0,
-    Player2,
-    Player3,
-    Enemy1,
-    Enemy2,
-    Enemy3,
+    DefenceEnemy1 = 0,
 }
 
 public class Factory : Singleton<Factory>
 {
-    public GameObject player1;
-    public GameObject player2;
-    public GameObject player3;
-    public GameObject enemy1;
-    public GameObject enemy2;
-    public GameObject enemy3;
-  
-  
-  
+    Enemy1Pool enemy1Pool;
+
+    protected override void OnInitialize()
+    {
+        base.OnInitialize();
+
+        enemy1Pool = GetComponentInChildren<Enemy1Pool>();
+
+        enemy1Pool?.Initialize();
+    }
 
     public GameObject GetObject(PoolObjectType type)
     {
         GameObject result = type switch
         {
-            PoolObjectType.Player1 => Instantiate(player1),
-            PoolObjectType.Player2 => Instantiate(player2),
-            PoolObjectType.Player3 => Instantiate(player3),
-            PoolObjectType.Enemy1 => Instantiate(enemy1),
-            PoolObjectType.Enemy2 => Instantiate(enemy2),
-            PoolObjectType.Enemy3 => Instantiate(enemy3),
+            PoolObjectType.DefenceEnemy1 => enemy1Pool?.GetObject()?.gameObject,
             _ => new GameObject(),
         };
         return result;

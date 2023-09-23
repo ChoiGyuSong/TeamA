@@ -1,12 +1,5 @@
-using System.Collections;
-using System.Collections.Generic;
-using Unity.VisualScripting;
-using UnityEditor;
 using UnityEngine;
-using UnityEngine.EventSystems;
-using UnityEngine.InputSystem;
-using static UnityEditor.Experimental.GraphView.GraphView;
-using static UnityEditor.PlayerSettings;
+using System;
 
 public class PlayerBase : CharacterBase
 {
@@ -28,9 +21,20 @@ public class PlayerBase : CharacterBase
 
     public int damagetype = 0;  // 데미지 소모량
 
-    public void Start()
+    public event Action<float> onStrikeChange;
+    public event Action<float> onAgilityChange;
+    public event Action<float> onIntelligentChange;
+    public event Action<float> onHPChange;
+
+    protected override void Awake()
     {
+        base.Awake();
         turnManager = FindObjectOfType<TurnManager>();
+    }
+
+    protected virtual void Start()
+    {
+        
     }
     
     /// <summary>
@@ -57,7 +61,7 @@ public class PlayerBase : CharacterBase
                 if (target.IsDead == false)     // 타겟이 살아있다면
                 {
                     MP -= costA;
-                    if (Random.Range(0, 100) < Agility)
+                    if (UnityEngine.Random.Range(0, 100) < Agility)
                     {
                         skill = (Strike * (StrikeMultiple * ASkillCoefficient) + Intelligent * IntelligentMultiple) * Critical;
                         turnManager.choiceAction = 0;   //초기화
@@ -77,7 +81,7 @@ public class PlayerBase : CharacterBase
                 if (target.IsDead == false)     // 타겟이 살아있다면
                 {
                     MP -= costB;
-                    if (Random.Range(0, 100) < Agility)
+                    if (UnityEngine.Random.Range(0, 100) < Agility)
                     {
                         skill = (Strike * (StrikeMultiple * BSkillCoefficient) + Intelligent * IntelligentMultiple) * Critical;
                     }
@@ -145,5 +149,31 @@ public class PlayerBase : CharacterBase
     protected override void Die()
     {
         base.Die();
+        turnManager.PlayerDied();
+    }
+
+    // 델리게이트용 함수
+    private void UpdateStrike(float newStrike)
+    {
+        Strike = newStrike;
+        onStrikeChange?.Invoke(newStrike);
+    }
+
+    private void UpdateAgility(float newAgility)
+    {
+        Agility = newAgility;
+        onAgilityChange?.Invoke(newAgility);
+    }
+
+    private void UpdateIntelligent(float newIntelligent)
+    {
+        Intelligent = newIntelligent;
+        onIntelligentChange?.Invoke(newIntelligent);
+    }
+
+    private void UpdateHP(float newHP)
+    {
+        HP = newHP;
+        onHPChange?.Invoke(newHP);
     }
 }

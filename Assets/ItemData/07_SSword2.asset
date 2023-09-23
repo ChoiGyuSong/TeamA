@@ -1,0 +1,38 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 429bf045a0310cb43ba804e07980a555, type: 3}
+  m_Name: 07_SSword2
+  m_EditorClassIdentifier: 
+  code: 3
+  itemName: "\uD1B1\uB0A0 \uB2E8\uAC80(\uB2E8\uAC802)"
+  itemIcon: {fileID: 21300000, guid: e4ef0aa22b05bfb468840ac51ee89e7d, type: 3}
+  maxStackCount: 1
+  upgrade: 0
+  beforeStr: 5
+  beforeAgi: 5
+  beforeInt: 5
+  beforeHP: 10
+  beforeMP: 10
+  beforeValue: 0
+  afterStr: 10
+  afterAgi: 10
+  afterInt: 10
+  afterHP: 20
+  afterMP: 20
+  afterValue: 1
+  risingStr: 5
+  risingAgi: 5
+  risingInt: 5
+  risingHP: 10
+  risingMP: 10
+  price: 1000
+  cost: 500

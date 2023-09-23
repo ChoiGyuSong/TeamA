@@ -6,6 +6,8 @@ using UnityEngine.SceneManagement;
 
 public class Singleton<T> : MonoBehaviour where T : Component
 {
+    private bool initialized = false;
+
     /// <summary>
     /// 이미 종료처리에 들어갔는지 확인하기 위한 변수
     /// </summary>
@@ -36,10 +38,8 @@ public class Singleton<T> : MonoBehaviour where T : Component
                 if (sigleton == null)                       // 씬에 싱글톤이 있는지 확인
                 {
                     // 씬에도 싱글톤이 없다.
-                    GameObject gameObj = new()
-                    {
-                        name = $"{typeof(T).Name} Singleton"   // 이름 수정하고
-                    };  // 빈오브젝트 만들고
+                    GameObject gameObj = new GameObject();  // 빈오브젝트 만들고
+                    gameObj.name = $"{typeof(T).Name} Singleton";   // 이름 수정하고
                     sigleton = gameObj.AddComponent<T>();   // 싱글톤 컴포넌트 추가  
                 }
                 instance = sigleton;                        // instance에 찾았거나 만들어진 객체 대입
@@ -80,7 +80,14 @@ public class Singleton<T> : MonoBehaviour where T : Component
 
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
-        OnInitialize();
+        if (!initialized)
+        {
+            OnPreInitialize();
+        }
+        if (mode != LoadSceneMode.Additive)    // 그냥 자동으로 씬로딩될 때는 4번이 들어옴
+        {
+            OnInitialize();
+        }
     }
 
     /// <summary>
@@ -91,7 +98,20 @@ public class Singleton<T> : MonoBehaviour where T : Component
         isShutDown = true;  // 종료 표시
     }
 
+    /// <summary>
+    /// 싱글톤이 만들어질 때 단 한번만 호출될 초기화 함수
+    /// </summary>
+    protected virtual void OnPreInitialize()
+    {
+        initialized = true;
+    }
+
+    /// <summary>
+    /// 싱글톤이 만들어지고 씬이 Single로 로드될 때마다 호출될 초기화 함수
+    /// </summary>
     protected virtual void OnInitialize()
     {
     }
+
+
 }
