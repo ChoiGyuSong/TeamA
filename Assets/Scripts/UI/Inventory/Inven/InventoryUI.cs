@@ -1,6 +1,8 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
@@ -12,8 +14,6 @@ public class InventoryUI : MonoBehaviour
     /// </summary>
     Inventory inven;
 
-    Equipment equip;
-
     InvenSlot tempSlot;
 
     /// <summary>
@@ -21,10 +21,11 @@ public class InventoryUI : MonoBehaviour
     /// </summary>
     InvenSlotUI[] slotsUI;
 
-    /// <summary>
-    /// 장비창의 슬롯UI
-    /// </summary>
-    EquipSlotUI[] equipSlotsUI;
+    InvenSlotUI[] invenSlotUI;
+    InvenSlotUI[] equipSlotsUI; 
+    InvenSlotUI[] equipSlotsUI1; 
+    InvenSlotUI[] equipSlotsUI2; 
+    InvenSlotUI[] equipSlotsUI3; 
 
     /// <summary>
     /// 아이템 이동이나 분리할 때 사용할 임시 슬롯 UI
@@ -76,9 +77,30 @@ public class InventoryUI : MonoBehaviour
     private void Awake()
     {
         Transform child = transform.GetChild(0);
-        slotsUI = child.GetComponentsInChildren<InvenSlotUI>();
+        invenSlotUI = child.GetComponentsInChildren<InvenSlotUI>();
 
-        equipSlotsUI = FindObjectsOfType<EquipSlotUI>();
+        child = transform.GetChild(3);
+        Transform grandChild = child.transform.GetChild(0);
+        equipSlotsUI1 = grandChild.GetComponentsInChildren<InvenSlotUI>();
+        grandChild = child.transform.GetChild(1);
+        equipSlotsUI2 = grandChild.GetComponentsInChildren<InvenSlotUI>();
+        grandChild = child.transform.GetChild(2);
+        equipSlotsUI3 = grandChild.GetComponentsInChildren<InvenSlotUI>();
+
+        equipSlotsUI1[0].equipType = EquipType.Gun;      // 장비 슬롯별로 타입 하나씩 지정
+        equipSlotsUI1[1].equipType = EquipType.Armor;
+        equipSlotsUI1[2].equipType = EquipType.Pants;
+        equipSlotsUI2[0].equipType = EquipType.Hammer;
+        equipSlotsUI2[1].equipType = EquipType.Armor;
+        equipSlotsUI2[2].equipType = EquipType.Pants;
+        equipSlotsUI3[0].equipType = EquipType.LSword;
+        equipSlotsUI3[1].equipType = EquipType.Armor;
+        equipSlotsUI3[2].equipType = EquipType.Pants;
+
+        equipSlotsUI = equipSlotsUI1.Concat(equipSlotsUI2).Concat(equipSlotsUI3).ToArray();
+
+        slotsUI = invenSlotUI.Concat(equipSlotsUI).ToArray();
+
 
         child = transform.GetChild(1);
         closeButton = child.GetComponent<Button>();
@@ -103,8 +125,6 @@ public class InventoryUI : MonoBehaviour
         child = transform.GetChild(5);
         detail = child.GetComponent<DetailInfoUI>();
 
-        
-
         inputActions = new PlayerInputAction();
 
         canvasGroup = GetComponent<CanvasGroup>();
@@ -121,7 +141,7 @@ public class InventoryUI : MonoBehaviour
     /// 인벤토리 UI 초기화 함수
     /// </summary>
     /// <param name="playerInven">이 UI와 연결될 인벤토리</param>
-    public void InitializeInventory(Inventory playerInven, Equipment equip)
+    public void InitializeInventory(Inventory playerInven)
     {
         inven = playerInven;
 
@@ -136,9 +156,6 @@ public class InventoryUI : MonoBehaviour
             slotsUI[i].onItemRightClick += OnItemDetailClickOff;
             slotsUI[i].onPointerEnter += OnItemDetailOn;
             slotsUI[i].onPointerExit += OnItemDetailOff;
-
-            //  slotsUI[i].onItemClick += OnItemDetailOn;
-            //  slotsUI[i].onItemRightClick += OnItemDetailOff;
         }
 
         // 임시 슬롯 초기화
@@ -166,7 +183,7 @@ public class InventoryUI : MonoBehaviour
     private void OnItemMoveBegin(uint index)
     {
         inven.MoveItem(index, tempSlotUI.Index);    // 시작 슬롯에서 임시 슬롯으로 아이템 옮기기
-        EquipSlotUI.dragStartSlotIndex = index;
+        InvenSlotUI.dragStartSlotIndex = index;
         tempSlotUI.Open();                          // 임시 슬롯 열기
     }
 
@@ -178,15 +195,30 @@ public class InventoryUI : MonoBehaviour
     private void OnItemMoveEnd(uint index, bool isSuccess)
     {
         uint finalIndex = index;                        // 실제 사용할 인덱스(기본적으로는 파라메터로 받은 인덱스)
-        if (!isSuccess)
+        if (30 <= finalIndex && finalIndex <= 38)
         {
-            finalIndex = EquipSlotUI.dragStartSlotIndex;
+            if (Inventory.invenSlot.ItemData.equipPart == slotsUI[index].equipType)
+            {
+                inven.MoveItem(tempSlotUI.Index, finalIndex);   // 임시 슬롯에서 장비 슬롯으로 아이템 옮기기
+                stat1.Status();     // 이동 끝났으면 1번 캐릭터의 스텟 갱신
+                stat2.Status();     // 이동 끝났으면 2번 캐릭터의 스텟 갱신
+                stat3.Status();     // 이동 끝났으면 3번 캐릭터의 스텟 갱신
+            }
+            else
+            {
+                // 임시슬롯에 있는 아이템 타입 =! 마우스 위치 슬롯의 지정타입이라면(장착 실패)
+                finalIndex = InvenSlotUI.dragStartSlotIndex;    // 드래그를 시작한 위치로
+                inven.MoveItem(tempSlotUI.Index, finalIndex);   // 임시 슬롯에서 인벤 슬롯으로 아이템 옮기기(원래 자리로 돌아감)
+            }
+        }
+        else
+        {
+            inven.MoveItem(tempSlotUI.Index, finalIndex);   // 임시 슬롯에서 도착 슬롯으로 아이템 옮기기
+            stat1.Status();
+            stat2.Status();
+            stat3.Status();
         }
 
-        inven.MoveItem(tempSlotUI.Index, finalIndex);   // 임시 슬롯에서 도착 슬롯으로 아이템 옮기기
-        stat1.Status();
-        stat2.Status();
-        stat3.Status();
         if (tempSlotUI.InvenSlot.IsEmpty)               // 비었다면(같은 종류의 아이템일 때 일부만 들어가는 경우가 있을 수 있으므로)
         {
             tempSlotUI.Close();                         // 임시 슬롯 닫기

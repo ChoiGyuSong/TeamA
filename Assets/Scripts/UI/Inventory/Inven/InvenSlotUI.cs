@@ -45,6 +45,9 @@ public class InvenSlotUI : SlotUI_Base, IDragHandler, IBeginDragHandler, IEndDra
     public Action<uint> onItemLeftClick;
     public Action<uint> onItemRightClick;
 
+    public EquipType equipType;
+
+    public static uint dragStartSlotIndex;
 
     /// <summary>
     /// 마우스 포인터가 슬롯 위에서 움직인다고 알리는 델리게이트. 파라메터는 마우스 포인터의 스크린 좌표
@@ -110,17 +113,11 @@ public class InvenSlotUI : SlotUI_Base, IDragHandler, IBeginDragHandler, IEndDra
         {
             // 마우스 위치에 어떤 오브젝트가 있다.
             InvenSlotUI endSlot = obj.GetComponent<InvenSlotUI>();  // 마우스 위치에 있는 오브젝트가 슬롯UI인지 확인
-            EquipSlotUI equipSlot = obj.GetComponent<EquipSlotUI>();    // 마우스 위치에 있는 오브젝트가 장비 슬롯UI 인지
 
             if (endSlot != null)
             {
                 // 슬롯UI다.
                 onDragEnd?.Invoke(endSlot.Index, true); // 끝난지점에 있는 슬롯의 인덱스와 정상적으로 끝났다고 알람 보내기
-            }
-            else if (equipSlot != null)
-            {
-                // 장비 슬롯 UI다
-                equipSlot.onDragEnd?.Invoke(equipSlot.EIndex, true);
             }
             else
             {
@@ -141,6 +138,7 @@ public class InvenSlotUI : SlotUI_Base, IDragHandler, IBeginDragHandler, IEndDra
     /// <param name="eventData"></param>
     public void OnPointerClick(PointerEventData eventData)
     {
+        Debug.Log($"인덱스 번호 : {this.Index}");
         if(tempSlotUI.tempSlot)
         {
             onClick?.Invoke(Index);

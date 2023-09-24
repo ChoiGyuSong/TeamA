@@ -1,13 +1,14 @@
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
+using Unity.VisualScripting.Antlr3.Runtime.Misc;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class Stat_2 : MonoBehaviour
 {
     TextMeshProUGUI[] status;
-    EquipSlotUI[] equipSlots;
+    InvenSlotUI[] slots;
 
     int[] Str;
     int[] Agi;
@@ -50,16 +51,16 @@ public class Stat_2 : MonoBehaviour
         grandChild = child.transform.GetChild(0);
         status[5] = grandChild.GetComponent<TextMeshProUGUI>();    // Speed Text
 
-        equipSlots = new EquipSlotUI[3];  // 장비 슬롯 찾기
+        slots = new InvenSlotUI[3];  // 장비 슬롯 찾기
         Transform parent = transform.parent;
         child = parent.transform.GetChild(2);
-        equipSlots[0] = child.GetComponent<EquipSlotUI>();  // 1번 캐릭터 무기
+        slots[0] = child.GetComponent<InvenSlotUI>();  // 2번 캐릭터 무기
 
         child = parent.transform.GetChild(3);
-        equipSlots[1] = child.GetComponent<EquipSlotUI>();  // 1번 캐릭터 상의
+        slots[1] = child.GetComponent<InvenSlotUI>();  // 2번 캐릭터 상의
 
         child = parent.transform.GetChild(4);
-        equipSlots[2] = child.GetComponent<EquipSlotUI>();  // 1번 캐릭터 하의
+        slots[2] = child.GetComponent<InvenSlotUI>();  // 2번 캐릭터 하의
     }
 
     private void Update()
@@ -76,16 +77,16 @@ public class Stat_2 : MonoBehaviour
     {
         for (int i = 0; i < 3; i++)
         {
-            if (equipSlots[i].EquipSlot.ItemData != null)
+            if (slots[i].InvenSlot.ItemData != null)
             {
-                Str[i] = equipSlots[i].EquipSlot.ItemData.beforeStr;
-                Agi[i] = equipSlots[i].EquipSlot.ItemData.beforeAgi;
-                Int[i] = equipSlots[i].EquipSlot.ItemData.beforeInt;
-                HP[i] = equipSlots[i].EquipSlot.ItemData.beforeHP;
-                MP[i] = equipSlots[i].EquipSlot.ItemData.beforeMP;
-                Speed[i] = equipSlots[i].EquipSlot.ItemData.speed;
+                Str[i] = slots[i].InvenSlot.ItemData.beforeStr;
+                Agi[i] = slots[i].InvenSlot.ItemData.beforeAgi;
+                Int[i] = slots[i].InvenSlot.ItemData.beforeInt;
+                HP[i] = slots[i].InvenSlot.ItemData.beforeHP;
+                MP[i] = slots[i].InvenSlot.ItemData.beforeMP;
+                Speed[i] = slots[i].InvenSlot.ItemData.speed;
             }
-            else if (equipSlots[i].EquipSlot.ItemData == null)
+            else if (slots[i].InvenSlot.ItemData == null)
             {
                 Str[i] = 0;
                 Agi[i] = 0;

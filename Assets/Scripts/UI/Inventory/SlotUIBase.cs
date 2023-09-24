@@ -12,22 +12,15 @@ public class SlotUI_Base : MonoBehaviour
     /// </summary>
     InvenSlot invenSlot;
 
-    EquipSlot equipSlot;
-
     /// <summary>
     /// 슬롯 확인용 프로퍼티
     /// </summary>
     public InvenSlot InvenSlot => invenSlot;
 
-    public EquipSlot EquipSlot => equipSlot;
-
     /// <summary>
     /// 슬롯이 몇번째 슬롯인지 확인하기 위한 프로퍼티
     /// </summary>
     public uint Index => invenSlot.Index;
-
-    public uint EIndex => equipSlot.Index;
-
 
     /// <summary>
     /// 아이템 아이콘 표시용 이미지
@@ -54,17 +47,6 @@ public class SlotUI_Base : MonoBehaviour
     }
 
     /// <summary>
-    /// 장비슬롯 초기화용 함수
-    /// </summary>
-    /// <param name="slot">이 UI와 연결할 슬롯</param>
-    public virtual void EInitializeSlot(EquipSlot slot)
-    {
-        equipSlot = slot;                       // 슬롯 저장
-        equipSlot.onSlotItemChange = ERefresh;   // 슬롯에 변화가 있을 때 실행될 함수 등록
-        ERefresh();                              // 초기 모습 갱신
-    }
-
-    /// <summary>
     /// 슬롯이 보이는 모습을 갱신하는 함수
     /// </summary>
     private void Refresh()
@@ -79,27 +61,6 @@ public class SlotUI_Base : MonoBehaviour
         {
             // 아이템이 들어있으면
             itemIcon.sprite = InvenSlot.ItemData.itemIcon;      // 아이콘에 이미지 설정
-            itemIcon.color = Color.white;                       // 아이콘이 보이도록 투명도 제거
-        }
-
-        OnRefresh();        // 상속받은 클래스에서 개별로 실행하고 싶은 코드 실행
-    }
-
-    /// <summary>
-    /// 슬롯이 보이는 모습을 갱신하는 함수
-    /// </summary>
-    private void ERefresh()
-    {
-        if (EquipSlot.IsEmpty)
-        {
-            // 비어있으면
-            itemIcon.color = Color.clear;   // 아이콘 안보이게 투명화
-            itemIcon.sprite = null;         // 아이콘에서 이미지 제거
-        }
-        else
-        {
-            // 아이템이 들어있으면
-            itemIcon.sprite = EquipSlot.ItemData.itemIcon;      // 아이콘에 이미지 설정
             itemIcon.color = Color.white;                       // 아이콘이 보이도록 투명도 제거
         }
 

@@ -13,7 +13,7 @@ public class Inventory
     /// <summary>
     /// 인벤토리에 들어있는 인벤 슬롯의 기본 갯수
     /// </summary>
-    public const int Default_Inventory_Size = 30;
+    public const int Default_Inventory_Size = 39;
 
     /// <summary>
     /// 임시슬롯용 인덱스
@@ -24,8 +24,6 @@ public class Inventory
     /// 이 인벤토리에 들어있는 슬롯의 배열
     /// </summary>
     InvenSlot[] slots;
-
-    EquipSlot[] equipSlots;
 
     /// <summary>
     /// 인벤토리 슬롯에 접근하기 위한 인덱서
@@ -46,10 +44,6 @@ public class Inventory
     public InvenSlot TempSlot => tempSlot;
 
     public static InvenSlot invenSlot;
-    public EquipSlot equipSlot;
-    Equipment equip;
-
-    public EquipSlot ETempSlot => equipSlot;
 
     /// <summary>
     /// 아이템 데이터 메니저(아이템 종류별 데이터를 확인할 수 있다.)
@@ -77,15 +71,7 @@ public class Inventory
             slots[i] = new InvenSlot(i);                // 슬롯 만들어서 저장
         }
 
-        equipSlots = new EquipSlot[size];
-        for (uint i = 0; i < 9; i++)
-        {
-            equipSlots[i] = new EquipSlot(size);
-        }
-
         tempSlot = new InvenSlot(TempSlotIndex);
-        equipSlot = new EquipSlot(TempSlotIndex);
-
         itemDataManager = new ItemDataManager();
         itemDataManager = GameManager.Inst.ItemData;    // 아이템 데이터 메니저 캐싱
         this.owner = owner;                             // 소유자 기록
@@ -180,7 +166,6 @@ public class Inventory
         if ((from != to) && IsValidIndex(from) && IsValidIndex(to))
         {
             InvenSlot fromSlot = (from == TempSlotIndex) ? TempSlot : slots[from];  // 임시 슬롯을 감안해서 삼항연산자로 처리
-            equipSlot = (from == TempSlotIndex) ? Equipment.equipSlot : equipSlots[from];
             if (fromSlot != null)
             {
                 if (!fromSlot.IsEmpty)//(equipSlot.IsEmpty)
@@ -195,18 +180,6 @@ public class Inventory
                         toSlot.AssignSlotItem(tempData);
 
                         invenSlot = toSlot;
-                    }
-                }
-                else if (!equipSlot.IsEmpty) //(fromSlot.IsEmpty)
-                {
-                    InvenSlot toSlot = (to == TempSlotIndex) ? TempSlot : slots[to];
-
-                    if (toSlot.IsEmpty)     // toSlot이 Inven이라면          && EtoSlot == null
-                    {
-                        // 다른 종류의 아이템이면 서로 스왑
-                        ItemData tempData = equipSlot.ItemData;
-                        equipSlot.AssignSlotItem(toSlot.ItemData);
-                        toSlot.AssignSlotItem(tempData);
                     }
                 }
             }

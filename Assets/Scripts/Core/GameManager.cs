@@ -38,11 +38,6 @@ public class GameManager : Singleton<GameManager>
     Inventory inven;
 
     /// <summary>
-    /// 플레이어의 장착인벤
-    /// </summary>
-    Equipment equip;
-
-    /// <summary>
     /// 인벤토리 확인용 프로퍼티
     /// </summary>
     public Inventory Inventory => inven;
@@ -64,12 +59,6 @@ public class GameManager : Singleton<GameManager>
     /// </summary>
     InventoryUI inventoryUI;
     public InventoryUI InvenUI => inventoryUI;
-
-    /// <summary>
-    /// 장착인벤 UI
-    /// </summary>
-    EquipmentUI equipmentUI;
-    public EquipmentUI EquipUI => equipmentUI;
 
     /// <summary>
     /// 플레이어가 가지고 있는 금액
@@ -110,16 +99,9 @@ public class GameManager : Singleton<GameManager>
     protected void Start()
     {
         inven = new Inventory(this);    // itemDataManager 설정 때문에 awake는 안됨
-        equip = new Equipment(this);
         if (GameManager.Inst.InvenUI != null)
         {
-            GameManager.Inst.InvenUI.InitializeInventory(inven, equip);  // 인벤토리와 인벤토리 UI연결
-        }
-
-        if (GameManager.Inst.EquipUI != null)
-        {
-            GameManager.Inst.EquipUI.InitializeInventory(equip, inven);  // 장비창와 장비창 UI연결
-
+            GameManager.Inst.InvenUI.InitializeInventory(inven);  // 인벤토리와 인벤토리 UI연결
         }
     }
 
@@ -134,7 +116,6 @@ public class GameManager : Singleton<GameManager>
         base.OnInitialize();
         player = FindObjectOfType<PlayerBase>();
         inventoryUI = FindObjectOfType<InventoryUI>();
-        equipmentUI = FindObjectOfType<EquipmentUI>();
     }
 
     public void BattleResultVictory()

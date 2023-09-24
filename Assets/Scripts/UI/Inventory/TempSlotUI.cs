@@ -42,21 +42,6 @@ public class TempSlotUI : SlotUI_Base
     }
 
     /// <summary>
-    /// 임시 슬롯 초기화하는 함수
-    /// </summary>
-    /// <param name="slot">이 임시 슬롯과 연결된 인벤 슬롯</param>
-    public override void EInitializeSlot(EquipSlot slot)
-    {
-        onTempSlotOpenClose = null;                 // 델리게이트 초기화
-
-        base.EInitializeSlot(slot);
-
-        owner = GameManager.Inst.InvenUI.Owner;     // 오너 미리 가지고 있기
-
-        Close();                                    // 시작할 때 자동으로 닫히기
-    }
-
-    /// <summary>
     /// 임시 슬롯을 여는 함수
     /// </summary>
     public void Open()
