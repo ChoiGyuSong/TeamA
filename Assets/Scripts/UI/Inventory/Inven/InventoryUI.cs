@@ -172,7 +172,7 @@ public class InventoryUI : MonoBehaviour
         
         
         //시작할 때 인벤토리 닫은채로 시작
-        //Close();
+        Close();
         
     }
 
