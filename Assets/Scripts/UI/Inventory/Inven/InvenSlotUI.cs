@@ -138,7 +138,6 @@ public class InvenSlotUI : SlotUI_Base, IDragHandler, IBeginDragHandler, IEndDra
     /// <param name="eventData"></param>
     public void OnPointerClick(PointerEventData eventData)
     {
-        Debug.Log($"인덱스 번호 : {this.Index}");
         if(tempSlotUI.tempSlot)
         {
             onClick?.Invoke(Index);
